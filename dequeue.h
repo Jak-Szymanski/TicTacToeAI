@@ -55,7 +55,7 @@ std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue){
 
   Node<Type> *ptr = dequeue.GetHead();
   while(ptr->GetNext() != NULL){
-    out << ptr->GetElem();
+    out << ptr->GetElem() << std::endl;
     ptr = ptr->GetNext();
   }
   out << ptr->GetElem(); 

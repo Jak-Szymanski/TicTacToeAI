@@ -34,7 +34,7 @@ class Edge{
 
 template<int Size>
 std::ostream &operator << (std::ostream &out, Edge<Size> const &edge){
-    out << "Początek: " << std::endl;
+    out << "Poczatek: " << std::endl;
     out << edge.GetStart() << std::endl;
     out << "Koniec: " << std::endl;
     out << edge.GetEnd() << std::endl;

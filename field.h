@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+#include "dequeue.h"
+
 #define OUTSIDE_BOARD_ERR 1
 #define INCORRECT_TYPE_ERR 2
 #define SPACE_TAKEN_ERR 3
@@ -22,11 +24,17 @@ class GameState{
 
         void InsertChar(int x, int y);
 
+        void DeleteChar(int x, int y);
+
         int CheckWinner();
 
         //void DisplayBoard();
 
         int DetermineCost();
+
+        Dequeue<GameState<Size>> GeneratePossibleMoves() const;
+
+        void ChangeMove() {NextMove = -NextMove;};
 };
 
 template<int Size>
@@ -67,7 +75,21 @@ void GameState<Size>::InsertChar(int x, int y){
 
     Board[x][y] = NextMove;
 
-    NextMove = -NextMove;
+    ChangeMove();
+}
+
+template <int Size>
+void GameState<Size>::DeleteChar(int x, int y){
+
+    if (x >= Size || y >= Size || x < 0 || y < 0) throw OUTSIDE_BOARD_ERR;
+
+    //if (type < -1 || type > 1) throw INCORRECT_TYPE_ERR;
+
+    //if (Board[x][y] != 0) throw SPACE_TAKEN_ERR;
+
+    Board[x][y] = 0;
+
+    //ChangeMove();
 }
 
 template <int Size>
@@ -193,3 +215,25 @@ void GameState<Size>::DisplayBoard(){
         std::cout << std::endl;
     }
 } */
+
+
+template<int Size>
+Dequeue<GameState<Size>> GameState<Size>::GeneratePossibleMoves() const {
+
+    Dequeue<GameState<Size>> dequeue;
+    GameState<Size> GS_copy = *this;
+
+    for(int i=0;i<Size;i++){
+        for(int j=0;j<Size;j++){
+            try{GS_copy.InsertChar(i,j);}
+            catch(){
+                continue;
+            }
+            dequeue.InsertFront(GS_copy);
+            GS_copy.DeleteChar(i,j);
+            GS_copy.ChangeMove();
+        }
+    }
+    return dequeue;
+
+}

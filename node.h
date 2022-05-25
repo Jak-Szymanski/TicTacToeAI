@@ -38,7 +38,7 @@ class Node{
 
 
   template<typename T>
-   friend class Dequeue;
+  friend class Dequeue;
 };
 
 

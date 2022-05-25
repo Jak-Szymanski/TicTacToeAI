@@ -37,10 +37,11 @@ std::ostream &operator << (std::ostream &out, Graph<Size> const &graph){
 template <int Size>
 Vertex<Size>* Graph<Size>::InsertVertex(GameState<Size> x){
 
-    Vertex<Size> V(x);
-    VQueue.InsertFront(V);
+    Vertex<Size> *V = new Vertex<Size>(x);
+    VQueue.InsertFront(*V);
     VQueue.GetHead()->GetElem().SetPos(VQueue.GetHead());
-    return *V;    
+   // std::cout << V << std::endl;
+    return V;    
 }
 
 template <int Size>

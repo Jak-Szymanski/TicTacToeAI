@@ -8,11 +8,13 @@ int main(){
     int x;
     int y;
 
-    Vertex<size> *V1, *V2;
+    Vertex<size> *V1 = new Vertex<size>();
+    Vertex<size> *V2 = new Vertex<size>();
     Graph<size> graph;
     tablica.InsertChar(0,0);
 
     V1 = graph.InsertVertex(tablica);
+    //std::cout << *V1 << std::endl;
     
     while(1){
         std::cout << "Ruch gracza: " << std::endl;
@@ -24,6 +26,9 @@ int main(){
         if(x == 10){
            std::cout << graph << std::endl;
         } else {
+        if(x==12){
+           // std::cout << tablica.GeneratePossibleMoves() << std::endl;
+        }
         std::cin >> y;
 
 
@@ -41,6 +46,8 @@ int main(){
 
         V2 = graph.InsertVertex(tablica);
         graph.InsertEdge(1,V1,V2);
+        
+        //std::cout << *V2 << std::endl;
         std::cout << tablica << std::endl;
         if (tablica.CheckWinner() != 0){
             std::cout << "Wygrany!!! " << tablica.CheckWinner() << std::endl;
