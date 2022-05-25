@@ -18,16 +18,24 @@ class Edge{
 
         Edge();
 
-        Edge(GameState<Size> x, Vertex<Size>* new_start, Vertex<Size>* new_end);
+        Edge(int x, Vertex<Size>* new_start, Vertex<Size>* new_end);
+
+        int GetObject() const {return Object;};
+
+        Vertex<Size> GetStart() const {return *Start;};
+
+        Vertex<Size> GetEnd() const {return *End;};
 
 };
 
 template<int Size>
 std::ostream &operator << (std::ostream &out, Edge<Size> const &edge){
     out << "Początek: " << std::endl;
-    out << edge.Start << std::endl;
+    out << edge.GetStart() << std::endl;
     out << "Koniec: " << std::endl;
-    out << edge.End << std::endl;
+    out << edge.GetEnd() << std::endl;
+    out << "Obiekt: " << std::endl;
+    out << edge.GetObject() << std::endl;
     return out;
 }
 
@@ -35,14 +43,14 @@ std::ostream &operator << (std::ostream &out, Edge<Size> const &edge){
 template <int Size>
 Edge<Size>::Edge(){
 
-    Object = GameState<Size>();
+    Object = 0;
     Start = NULL;
     End = NULL;
     Pos = NULL;
 }
 
 template <int Size>
-Edge<Size>::Edge(GameState<Size> x, Vertex<Size>* new_start, Vertex<Size>* new_end){
+Edge<Size>::Edge(int x, Vertex<Size>* new_start, Vertex<Size>* new_end){
 
     Object = x;
     Start = new_start;

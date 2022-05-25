@@ -37,7 +37,8 @@ class Node{
     void SetPrev(Node<Type> *new_prev){Prev = new_prev;};
 
 
-   // friend class Dequeue;
+  template<typename T>
+   friend class Dequeue;
 };
 
 

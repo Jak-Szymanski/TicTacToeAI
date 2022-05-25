@@ -20,7 +20,7 @@ int main(){
         std::cout << std::endl << "Podaj ruch" << std::endl;
         std::cin >> x;
         if(x == 10){
-           //std::cout << graph << std::endl;
+           std::cout << graph << std::endl;
         } else {
         std::cin >> y;
 

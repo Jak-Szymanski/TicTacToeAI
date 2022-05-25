@@ -20,11 +20,13 @@ class Vertex{
         Node<Vertex<Size>>* GetPos() const {return Pos;};
 
         void SetPos(Node<Vertex<Size>>* new_pos) {Pos = new_pos;};
+
+        GameState<Size> GetObject() const {return Object;};
 };
 
 template<int Size>
 std::ostream &operator << (std::ostream &out, Vertex<Size> const &vertex){
-    out << vertex.Object;
+    out << vertex.GetObject();
     return out;
 }
 
@@ -36,8 +38,9 @@ Vertex<Size>::Vertex(){
     Pos = NULL;
 }
 
-/* template <int Size>
+template <int Size>
 Vertex<Size>::Vertex(GameState<Size> x){
 
-    
-} */
+    Object = x;
+    Pos = NULL;    
+}

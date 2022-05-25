@@ -43,7 +43,7 @@ class Dequeue{
 
     void PrintEnd();
 };
-/* 
+
 
  template<typename Type>
 std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue){
@@ -185,7 +185,7 @@ Type Dequeue<Type>::Remove(int n){
   ptr->Next = ptr->Next->Next;
   }
   return pack;
-}  */
+}  
 
 // Wyczyść całą kolejkę
 /* template<typename T>

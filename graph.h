@@ -24,7 +24,7 @@ class Graph{
         Edge<Size> InsertEdge(GameState<Size> x, Vertex<Size>* start, Vertex<Size>* end);
 };
 
-/* 
+
 template<int Size>
 Dequeue<Vertex<Size>> Graph<Size>::Vertices() const{
     return VQueue;
@@ -55,4 +55,4 @@ Edge<Size> Graph<Size>::InsertEdge(GameState<Size> x, Vertex<Size>* start, Verte
     EQueue.InsertFront(E);
     EQueue.Head->Elem.Pos = EQueue.Head;
     return E;
-} */
+}
