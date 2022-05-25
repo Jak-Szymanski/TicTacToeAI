@@ -1,8 +1,6 @@
 #pragma once
 
 #include "dequeue.h"
-#include "vertex.h"
-#include "edge.h"
 
 template <int Size>
 class Graph{
@@ -40,7 +38,7 @@ Vertex<Size>* Graph<Size>::InsertVertex(GameState<Size> x){
     Vertex<Size> *V = new Vertex<Size>(x);
     VQueue.InsertFront(*V);
     VQueue.GetHead()->GetElem().SetPos(VQueue.GetHead());
-   // std::cout << V << std::endl;
+   //std::cout << *V << std::endl;
     return V;    
 }
 

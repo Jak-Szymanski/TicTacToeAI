@@ -1,7 +1,5 @@
 #pragma once
 
-#include "node.h"
-#include "vertex.h"
 #include "edge.h"
 
 template<typename Type>

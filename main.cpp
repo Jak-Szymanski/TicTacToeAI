@@ -1,4 +1,3 @@
-#include "field.h"
 #include "graph.h"
 
 int main(){
@@ -13,6 +12,9 @@ int main(){
     Graph<size> graph;
     tablica.InsertChar(0,0);
 
+/*     Vertex<size> V3(tablica);
+
+    std::cout << "V3: " << std::endl <<  V3 << std::endl; */
     V1 = graph.InsertVertex(tablica);
     //std::cout << *V1 << std::endl;
     
@@ -27,7 +29,7 @@ int main(){
            std::cout << graph << std::endl;
         } else {
         if(x==12){
-           // std::cout << tablica.GeneratePossibleMoves() << std::endl;
+           std::cout << tablica.GeneratePossibleMoves() << std::endl;
         }
         std::cin >> y;
 

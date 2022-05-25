@@ -24,11 +24,11 @@ class GameState{
 
         void InsertChar(int x, int y);
 
+       // GameState &operator = (const GameState& GS) {return *this;};
+
         void DeleteChar(int x, int y);
 
         int CheckWinner();
-
-        //void DisplayBoard();
 
         int DetermineCost();
 
@@ -202,31 +202,16 @@ int GameState<Size>::DetermineCost(){
 }
 
 
-/* template <int Size>
-void GameState<Size>::DisplayBoard(){
-
-    for(int i=0;i<Size;i++){
-        for(int j=0;j<Size;j++){
-            if (Board[i][j] == -1) std::cout << " X ";
-            if (Board[i][j] == 0) std::cout << "   ";
-            if (Board[i][j] == 1) std::cout << " O ";
-            if (j != Size -1) std::cout << "|";
-        }
-        std::cout << std::endl;
-    }
-} */
-
-
 template<int Size>
 Dequeue<GameState<Size>> GameState<Size>::GeneratePossibleMoves() const {
 
     Dequeue<GameState<Size>> dequeue;
-    GameState<Size> GS_copy = *this;
+    GameState<Size> GS_copy;
 
     for(int i=0;i<Size;i++){
         for(int j=0;j<Size;j++){
             try{GS_copy.InsertChar(i,j);}
-            catch(){
+            catch(const int error_type){
                 continue;
             }
             dequeue.InsertFront(GS_copy);
