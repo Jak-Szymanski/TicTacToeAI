@@ -5,51 +5,51 @@
 #include <fstream> 
 #include <iostream>
 
-template<typename T>
+template<typename Type>
 class Node{
 
   private:
 
-    T Elem;
+    Type Elem;
 
-    Node *Next;
+    Node<Type> *Next;
 
-    Node *Prev;
+    Node<Type> *Prev;
   
   public:
 
     Node();
 
-    Node(T new_elem);
+    Node(Type new_elem);
 
     //int GetKey() const{return Elem.Key;};
 
     //std::string GetMessage() const{return Elem.Message;};
 
-    Node * const GetNext() const{return Next;};
+    Node<Type> * const GetNext() const{return Next;};
 
-    Node * const GetPrev() const{return Prev;};
+    Node<Type> * const GetPrev() const{return Prev;};
 
-    T GetElem() const{return Elem;};
+    Type GetElem() const{return Elem;};
 
-    void SetNext(Node *new_next){Next = new_next;};
+    void SetNext(Node<Type> *new_next){Next = new_next;};
 
-    void SetPrev(Node *new_prev){Prev = new_prev;};
+    void SetPrev(Node<Type> *new_prev){Prev = new_prev;};
 
 
-    friend class Queue;
+    friend class Dequeue;
 };
 
 
-template <typename T>
-Node<T>::Node(){
-  Elem = T();
+template <typename Type>
+Node<Type>::Node(){
+  Elem = Type();
   Next = NULL;
   Prev = NULL;
 }
 
-template <typename T>
-Node<T>::Node(T new_elem){
+template <typename Type>
+Node<Type>::Node(Type new_elem){
   Elem = new_elem;
   Next = NULL;
   Prev = NULL;

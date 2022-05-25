@@ -34,9 +34,9 @@ std::ostream &operator << (std::ostream &out, GameState<Size> const &GS){
 
     for(int i=0;i<Size;i++){
         for(int j=0;j<Size;j++){
-            if (Board[i][j] == -1) out << " X ";
-            if (Board[i][j] == 0) out << "   ";
-            if (Board[i][j] == 1) out << " O ";
+            if (GS.Board[i][j] == -1) out << " X ";
+            if (GS.Board[i][j] == 0) out << "   ";
+            if (GS.Board[i][j] == 1) out << " O ";
             if (j != Size -1) out << "|";
         }
         out << std::endl;

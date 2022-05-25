@@ -1,7 +1,6 @@
 #pragma once
 
 #include "node.h"
-#include "graph.h"
 
 template <int Size>
 class Vertex{
@@ -17,6 +16,10 @@ class Vertex{
         Vertex();
 
         Vertex(GameState<Size> x);
+
+        Node<Vertex<Size>>* GetPos() const {return Pos;};
+
+        void SetPos(Node<Vertex<Size>>* new_pos) {Pos = new_pos;};
 };
 
 template<int Size>

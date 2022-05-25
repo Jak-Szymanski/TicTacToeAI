@@ -3,10 +3,13 @@
 
 int main(){
 
+    typedef Graph<4> Graph4;
+
     GameState<4> tablica;
     int x;
     int y;
-
+   
+    Graph4 graph;
     tablica.InsertChar(0,0);
     
     while(1){
@@ -16,7 +19,11 @@ int main(){
         
         std::cout << std::endl << "Podaj ruch" << std::endl;
         std::cin >> x;
+        if(x == 10){
+           //std::cout << graph << std::endl;
+        } else {
         std::cin >> y;
+
 
         try {tablica.InsertChar(x,y);}
         catch (const int error_type){
@@ -29,12 +36,15 @@ int main(){
                 continue;
             }
         }
-        tablica.DisplayBoard();
+
+        graph.InsertVertex(tablica);
+        std::cout << tablica << std::endl;
         if (tablica.CheckWinner() != 0){
             std::cout << "Wygrany!!! " << tablica.CheckWinner() << std::endl;
         }
         std::cout << "Koszt: " << tablica.DetermineCost() << std::endl;
         std::cout << std::endl;
-
+        
+        }
     }
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "vertex.h"
-#include "field.h"
 
 template <int Size>
 class Edge{
