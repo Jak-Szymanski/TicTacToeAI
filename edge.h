@@ -28,6 +28,7 @@ std::ostream &operator << (std::ostream &out, Edge<Size> const &edge){
     out << edge.Start << std::endl;
     out << "Koniec: " << std::endl;
     out << edge.End << std::endl;
+    return out;
 }
 
 
@@ -36,15 +37,15 @@ Edge<Size>::Edge(){
 
     Object = GameState<Size>();
     Start = NULL;
-    End = NULL:
+    End = NULL;
     Pos = NULL;
 }
 
 template <int Size>
 Edge<Size>::Edge(GameState<Size> x, Vertex<Size>* new_start, Vertex<Size>* new_end){
 
-    Object = x
+    Object = x;
     Start = new_start;
-    End = new_end:
+    End = new_end;
     Pos = NULL;
 }

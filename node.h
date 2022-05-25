@@ -37,7 +37,7 @@ class Node{
     void SetPrev(Node<Type> *new_prev){Prev = new_prev;};
 
 
-    friend class Dequeue;
+   // friend class Dequeue;
 };
 
 

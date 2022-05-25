@@ -104,6 +104,7 @@ int GameState<Size>::CheckWinner(){
             else continue;
         } else break;
     }
+    return 0;
 }
 
 template<int Size>
@@ -175,6 +176,7 @@ int GameState<Size>::DetermineCost(){
     if(biggest > -smallest) return biggest;
     if(NextMove == 1) return biggest;
     if(NextMove == -1) return smallest;
+    return 0;
 }
 
 

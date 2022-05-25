@@ -32,7 +32,7 @@ std::ostream &operator << (std::ostream &out, Vertex<Size> const &vertex){
 template <int Size>
 Vertex<Size>::Vertex(){
 
-    Object = GameState();
+    Object = GameState<Size>();
     Pos = NULL;
 }
 
