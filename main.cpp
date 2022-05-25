@@ -3,14 +3,16 @@
 
 int main(){
 
-    typedef Graph<4> Graph4;
-
-    GameState<4> tablica;
+    const int size = 3;
+    GameState<size> tablica;
     int x;
     int y;
-   
-    Graph4 graph;
+
+    Vertex<size> *V1, *V2;
+    Graph<size> graph;
     tablica.InsertChar(0,0);
+
+    V1 = graph.InsertVertex(tablica);
     
     while(1){
         std::cout << "Ruch gracza: " << std::endl;
@@ -37,7 +39,8 @@ int main(){
             }
         }
 
-        graph.InsertVertex(tablica);
+        V2 = graph.InsertVertex(tablica);
+        graph.InsertEdge(1,V1,V2);
         std::cout << tablica << std::endl;
         if (tablica.CheckWinner() != 0){
             std::cout << "Wygrany!!! " << tablica.CheckWinner() << std::endl;

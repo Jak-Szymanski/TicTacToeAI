@@ -19,6 +19,10 @@ class Edge{
         Edge();
 
         Edge(int x, Vertex<Size>* new_start, Vertex<Size>* new_end);
+    
+        Node<Edge<Size>>* GetPos() const {return Pos;};
+
+        void SetPos(Node<Edge<Size>>* new_pos) {Pos = new_pos;};
 
         int GetObject() const {return Object;};
 
