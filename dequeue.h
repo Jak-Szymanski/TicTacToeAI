@@ -186,7 +186,7 @@ Type Dequeue<Type>::Remove(int n){
 }  
 
 // Wyczyść całą kolejkę
-/* template<typename T>
+template<typename T>
 void Dequeue<T>::Delete(){
 
   Node<T> *ptr = Head;
@@ -198,7 +198,7 @@ void Dequeue<T>::Delete(){
     free(ptr);
     ptr = next;
   }
-} */
+}
 
 /* Wyświetl całą kolejkę idąc od końca
 (funkcja była używana jedynie do testów poprawności działania kolejki w obu kierunkach) */

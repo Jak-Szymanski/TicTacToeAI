@@ -7,6 +7,7 @@
 #define SPACE_TAKEN_ERR 3
 
 #define DRAW -2
+#define POTENTIAL_DRAW -100
 
 template<int Size>
 class GameState{
@@ -27,9 +28,15 @@ class GameState{
 
         void InsertChar(int x, int y);
 
+        void InsertBoard(GameState<Size> GS);
+
        // GameState &operator = (const GameState& GS) {return *this;};
 
         void DeleteChar(int x, int y);
+
+        int GetCost() {return Cost;};
+
+        void SetCost(int new_cost) {Cost = new_cost;};
 
         int CheckWinner();
 
@@ -38,6 +45,9 @@ class GameState{
         Dequeue<GameState<Size>> GeneratePossibleMoves() const;
 
         void ChangeMove() {NextMove = -NextMove;};
+
+        bool operator == (const GameState<Size> &GS) const;
+
 };
 
 template<int Size>
@@ -52,7 +62,7 @@ std::ostream &operator << (std::ostream &out, GameState<Size> const &GS){
         }
         out << std::endl;
     }
-    out << "Koszt: " << GS.Cost << std::endl;
+    //out << "Koszt: " << GS.Cost << std::endl;
     return out;
 }
 
@@ -63,7 +73,7 @@ GameState<Size>::GameState(){
             Board[i][j] = 0;
         }
     }
-    NextMove = 1;
+    NextMove = -1;
     Cost = 0;
 }
 
@@ -92,6 +102,15 @@ void GameState<Size>::InsertChar(int x, int y){
     Board[x][y] = NextMove;
 }
 
+template<int Size>
+void GameState<Size>::InsertBoard(GameState<Size> GS){
+    for(int i=0;i<Size;i++){
+        for(int j=0;j<Size;j++){
+            Board[i][j] = GS.Board[i][j];
+        }
+    }
+}
+
 template <int Size>
 void GameState<Size>::DeleteChar(int x, int y){
 
@@ -109,6 +128,7 @@ void GameState<Size>::DeleteChar(int x, int y){
 template <int Size>
 int GameState<Size>::CheckWinner(){
 
+    int draw=0;
     for(int i=0;i<Size;i++){
         for(int j=0;j<Size;j++){
             if(Board[i][j] == Board[i][j+1]){
@@ -135,7 +155,7 @@ int GameState<Size>::CheckWinner(){
     }
 
     for(int i=0; i<Size;i++){
-        if(Board[i][Size-i-1] == Board[i-1][Size-i]){
+        if(Board[Size-i-1][i] == Board[Size-i-2][i+1]){
             if (i+2 == Size) return Board[i][i];
             else continue;
         } else break;
@@ -156,6 +176,7 @@ int GameState<Size>::DetermineCost(){
     
     int arr[2*Size + 2];
     int k=0;
+    int draw = 0;
 
     for(int i=0; i<2*Size+2;i++){
         arr[i] = 0;
@@ -165,6 +186,7 @@ int GameState<Size>::DetermineCost(){
         for(int j=0;j<Size;j++){
             if(arr[k] * Board[i][j] < 0){
                 arr[k] = 0;
+                draw++;
                 break;
             }
             arr[k] += Board[i][j];
@@ -177,6 +199,7 @@ int GameState<Size>::DetermineCost(){
         for(int j=0;j<Size;j++){
             if(arr[k] * Board[j][i] < 0){
                 arr[k] = 0;
+                draw++;
                 break;
             }
             arr[k] += Board[j][i];
@@ -187,6 +210,7 @@ int GameState<Size>::DetermineCost(){
     for(int i=0;i<Size;i++){
         if(arr[k] * Board[i][i] < 0){
             arr[k] = 0;
+            draw++;
             break;
         }
         arr[k] += Board[i][i];
@@ -196,12 +220,14 @@ int GameState<Size>::DetermineCost(){
     for(int i=0;i<Size;i++){
         if(arr[k] * Board[i][Size-i-1] < 0){
             arr[k] = 0;
+            draw++;
             break;
         }
         arr[k] += Board[i][Size-i-1];
     }
     k++;
 
+   // if(draw == 2*Size+2) return POTENTIAL_DRAW;
     int smallest = 0;
     int biggest = 0;
 
@@ -258,4 +284,18 @@ Dequeue<GameState<Size>> GameState<Size>::GeneratePossibleMoves() const{
     }
     return dequeue;
 
+}
+
+
+template<int Size>
+bool GameState<Size>::operator== (const GameState<Size> &GS) const{
+
+    if(Cost != GS.Cost || NextMove != GS.NextMove) return false;
+
+    for(int i=0;i<Size;i++){
+        for(int j=0;j<Size;j++){
+            if (Board[i][j] != GS.Board[i][j]) return false;
+        }
+    }
+    return true;
 }

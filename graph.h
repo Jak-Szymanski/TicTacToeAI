@@ -1,6 +1,6 @@
 #pragma once
 
-#define SEARCH_DEPTH 2
+#define SEARCH_DEPTH 4
 
 #include "dequeue.h"
 #include "edge.h"
@@ -24,9 +24,23 @@ class Graph{
 
         Edge<Size> InsertEdge(int x, Vertex<Size>* start, Vertex<Size>* end);
 
+        Dequeue<Edge<Size>> IncidentEdges(Vertex<Size> *V) const;
+
+        Dequeue<Vertex<Size>> AdjacentVertices(Vertex<Size> *V) const;
+
+        void Delete();
+
         //void CreateGraph (GameState<Size> GS);
 
-        void SearchGraph(Vertex<Size>* V1, int i);
+        void CreateFutureMovesTree(Vertex<Size>* V1, int i);
+
+        void Min(Vertex<Size> *V);
+
+        void Max(Vertex<Size> *V);
+
+        void Minimax(Vertex<Size> *V);
+
+        GameState<Size> GetMaxMove(Vertex<Size> *V);
 };
 
 /* template<int Size>
@@ -35,7 +49,7 @@ void Graph<Size>::CreateGraph (GameState<Size> GS){
 } */
 
 template<int Size>
-void Graph<Size>::SearchGraph (Vertex<Size>* V1, int i){
+void Graph<Size>::CreateFutureMovesTree (Vertex<Size>* V1, int i){
 
     if(i==0) return;
 
@@ -50,7 +64,7 @@ void Graph<Size>::SearchGraph (Vertex<Size>* V1, int i){
         V2 = InsertVertex(tmp_gs);
         InsertEdge(1,V1,V2);
         if(tmp_gs.Cost != Size && tmp_gs.Cost != -Size){
-            SearchGraph(V2, i-1);
+            CreateFutureMovesTree(V2, i-1);
         }
     }
 }
@@ -83,4 +97,111 @@ Edge<Size> Graph<Size>::InsertEdge(int x, Vertex<Size>* start, Vertex<Size>* end
     EQueue.InsertFront(E);
     EQueue.GetHead()->GetElem().SetPos(EQueue.GetHead());
     return E;
+}
+
+template<int Size>
+Dequeue<Edge<Size>> Graph<Size>::IncidentEdges(Vertex<Size> *V) const{
+
+    Dequeue<Edge<Size>> dequeue;
+    
+    Node<Edge<Size>> *ptr = EQueue.GetHead();
+    while(ptr != NULL){
+        if (ptr->GetElem().GetStart() == *V){
+            dequeue.InsertFront(ptr->GetElem());
+        }
+        ptr = ptr->GetNext();
+    }
+    return dequeue;
+}
+
+template<int Size>
+Dequeue<Vertex<Size>> Graph<Size>::AdjacentVertices(Vertex<Size> *V) const{
+
+    Dequeue<Edge<Size>> incident = IncidentEdges(V);
+    Dequeue<Vertex<Size>> adjacent;
+
+    while(!incident.IsEmpty()){
+        adjacent.InsertFront(incident.RemoveFirst().GetEnd());
+    }
+    return adjacent;
+}
+
+template<int Size>
+void Graph<Size>::Delete(){
+
+    VQueue.Delete();
+    EQueue.Delete();
+}
+
+
+template<int Size>
+void Graph<Size>::Min(Vertex<Size> *V){
+
+    Dequeue<Vertex<Size>> adjacent = AdjacentVertices(V);
+    int min = 100;
+    int tmp_cost;
+
+    while(!adjacent.IsEmpty()){
+        tmp_cost = adjacent.RemoveFirst().GetObject().GetCost();
+        if(tmp_cost < min){
+            min = tmp_cost;
+        }
+    }
+    V->SetCost(min);
+}
+
+
+template<int Size>
+void Graph<Size>::Max(Vertex<Size> *V){
+
+    Dequeue<Vertex<Size>> adjacent = AdjacentVertices(V);
+    int max = -100;
+    int tmp_cost;
+
+    while(!adjacent.IsEmpty()){
+        tmp_cost = adjacent.RemoveFirst().GetObject().GetCost();
+        if(tmp_cost > max){
+            max = tmp_cost;
+        }
+    }
+    V->SetCost(max);
+}
+
+template<int Size>
+void Graph<Size>::Minimax(Vertex<Size> *V){
+
+    if (IncidentEdges(V).IsEmpty()){
+        if(V->GetObject().NextMove == 1){
+            Max(V);
+        } else {
+            Min(V);
+        }
+        return;
+    }
+
+    Dequeue<Vertex<Size>> adjacent = AdjacentVertices(V);
+
+    while (!adjacent.IsEmpty()){
+        Minimax(&adjacent.RemoveFirst());
+    }
+
+    if(V->GetObject().NextMove == 1){
+        Max(V);
+    } else {
+        Min(V);
+    }
+}
+
+template<int Size>
+GameState<Size> Graph<Size>::GetMaxMove(Vertex<Size> *V){
+
+    Dequeue<Vertex<Size>> adjacent = AdjacentVertices(V);
+    GameState<Size> GS;
+
+    while(!adjacent.IsEmpty()){
+        GS = adjacent.RemoveFirst().GetObject();
+        if(GS.GetCost() == V->GetObject().GetCost()){
+            return GS;  
+        }
+    }
 }
