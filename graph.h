@@ -1,6 +1,9 @@
 #pragma once
 
+#define SEARCH_DEPTH 2
+
 #include "dequeue.h"
+#include "edge.h"
 
 template <int Size>
 class Graph{
@@ -20,7 +23,38 @@ class Graph{
         Vertex<Size>* InsertVertex(GameState<Size> x);
 
         Edge<Size> InsertEdge(int x, Vertex<Size>* start, Vertex<Size>* end);
+
+        //void CreateGraph (GameState<Size> GS);
+
+        void SearchGraph(Vertex<Size>* V1, int i);
 };
+
+/* template<int Size>
+void Graph<Size>::CreateGraph (GameState<Size> GS){
+
+} */
+
+template<int Size>
+void Graph<Size>::SearchGraph (Vertex<Size>* V1, int i){
+
+    if(i==0) return;
+
+    Dequeue<GameState<Size>> possible_moves;
+    Vertex<Size> *V2 = new Vertex<Size>();
+    GameState<Size> tmp_gs;
+
+    possible_moves = V1->GetObject().GeneratePossibleMoves();
+
+    while(!possible_moves.IsEmpty()){
+        tmp_gs = possible_moves.RemoveFirst();
+        V2 = InsertVertex(tmp_gs);
+        InsertEdge(1,V1,V2);
+        if(tmp_gs.Cost != Size && tmp_gs.Cost != -Size){
+            SearchGraph(V2, i-1);
+        }
+    }
+}
+
 
 
 

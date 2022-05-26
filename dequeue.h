@@ -1,6 +1,6 @@
 #pragma once
 
-#include "edge.h"
+#include "node.h"
 
 template<typename Type>
 class Dequeue{

@@ -1,4 +1,5 @@
 #include "graph.h"
+#include "edge.h"
 
 int main(){
 
@@ -8,14 +9,18 @@ int main(){
     int y;
 
     Vertex<size> *V1 = new Vertex<size>();
-    Vertex<size> *V2 = new Vertex<size>();
+   // Vertex<size> *V2 = new Vertex<size>();
     Graph<size> graph;
     tablica.InsertChar(0,0);
+    tablica.ChangeMove();
+    tablica.DetermineCost();
 
 /*     Vertex<size> V3(tablica);
 
     std::cout << "V3: " << std::endl <<  V3 << std::endl; */
-    V1 = graph.InsertVertex(tablica);
+
+    //V1 = graph.InsertVertex(tablica);
+    
     //std::cout << *V1 << std::endl;
     
     while(1){
@@ -29,7 +34,10 @@ int main(){
            std::cout << graph << std::endl;
         } else {
         if(x==12){
-           std::cout << tablica.GeneratePossibleMoves() << std::endl;
+           //std::cout << tablica.GeneratePossibleMoves() << std::endl;
+           V1 = graph.InsertVertex(tablica);
+           graph.SearchGraph(V1, SEARCH_DEPTH);
+           std::cout << graph << std::endl;
         }
         std::cin >> y;
 
@@ -46,16 +54,21 @@ int main(){
             }
         }
 
-        V2 = graph.InsertVertex(tablica);
-        graph.InsertEdge(1,V1,V2);
+        tablica.ChangeMove();
+        tablica.DetermineCost();
+
+        //V2 = graph.InsertVertex(tablica);
+        //graph.InsertEdge(1,V1,V2);
         
         //std::cout << *V2 << std::endl;
         std::cout << tablica << std::endl;
-        if (tablica.CheckWinner() != 0){
-            std::cout << "Wygrany!!! " << tablica.CheckWinner() << std::endl;
+        int result = tablica.CheckWinner();
+        if (result == 1 || result == -1){
+            std::cout << "Wygrany!!! " << result << std::endl;
+        } 
+        if (result == DRAW){
+            std::cout << "Remis! " << std::endl;
         }
-        std::cout << "Koszt: " << tablica.DetermineCost() << std::endl;
-        std::cout << std::endl;
         
         }
     }

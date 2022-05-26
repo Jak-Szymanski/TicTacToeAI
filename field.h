@@ -1,11 +1,12 @@
 #pragma once
-#include <iostream>
 
 #include "dequeue.h"
 
 #define OUTSIDE_BOARD_ERR 1
 #define INCORRECT_TYPE_ERR 2
 #define SPACE_TAKEN_ERR 3
+
+#define DRAW -2
 
 template<int Size>
 class GameState{
@@ -21,6 +22,8 @@ class GameState{
     //public:
 
         GameState();
+
+        GameState(const GameState<Size> &GS);
 
         void InsertChar(int x, int y);
 
@@ -49,6 +52,7 @@ std::ostream &operator << (std::ostream &out, GameState<Size> const &GS){
         }
         out << std::endl;
     }
+    out << "Koszt: " << GS.Cost << std::endl;
     return out;
 }
 
@@ -60,6 +64,18 @@ GameState<Size>::GameState(){
         }
     }
     NextMove = 1;
+    Cost = 0;
+}
+
+template<int Size>
+GameState<Size>::GameState(const GameState<Size> &GS){
+    for(int i=0;i<Size;i++){
+        for(int j=0;j<Size;j++){
+            Board[i][j] = GS.Board[i][j];
+        }
+    }
+    NextMove = GS.NextMove;
+    Cost = GS.Cost;
 }
 
 
@@ -74,8 +90,6 @@ void GameState<Size>::InsertChar(int x, int y){
     if (Board[x][y] != 0) throw SPACE_TAKEN_ERR;
 
     Board[x][y] = NextMove;
-
-    ChangeMove();
 }
 
 template <int Size>
@@ -126,7 +140,15 @@ int GameState<Size>::CheckWinner(){
             else continue;
         } else break;
     }
-    return 0;
+
+
+    for(int i=0; i<Size;i++){
+        for(int j=0; j<Size;j++){
+            if(Board[i][j] == 0) return 0;
+        }
+    }
+    
+    return DRAW;
 }
 
 template<int Size>
@@ -194,19 +216,32 @@ int GameState<Size>::DetermineCost(){
         }
     }
 
-    if(-smallest > biggest) return smallest;
-    if(biggest > -smallest) return biggest;
-    if(NextMove == 1) return biggest;
-    if(NextMove == -1) return smallest;
+    if(-smallest > biggest){
+        Cost = smallest;
+        return smallest;
+    }
+    if(biggest > -smallest){
+        Cost = biggest;
+        return biggest;
+    } 
+    if(NextMove == 1){ 
+        Cost = biggest;
+        return biggest;
+    }
+    if(NextMove == -1) {
+        Cost = smallest;
+        return smallest;
+    }
+    Cost = 0;
     return 0;
 }
 
 
 template<int Size>
-Dequeue<GameState<Size>> GameState<Size>::GeneratePossibleMoves() const {
+Dequeue<GameState<Size>> GameState<Size>::GeneratePossibleMoves() const{
 
     Dequeue<GameState<Size>> dequeue;
-    GameState<Size> GS_copy;
+    GameState<Size> GS_copy(*this);
 
     for(int i=0;i<Size;i++){
         for(int j=0;j<Size;j++){
@@ -214,6 +249,8 @@ Dequeue<GameState<Size>> GameState<Size>::GeneratePossibleMoves() const {
             catch(const int error_type){
                 continue;
             }
+            GS_copy.ChangeMove();
+            GS_copy.DetermineCost();
             dequeue.InsertFront(GS_copy);
             GS_copy.DeleteChar(i,j);
             GS_copy.ChangeMove();

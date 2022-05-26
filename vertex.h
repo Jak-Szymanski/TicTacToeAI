@@ -1,6 +1,5 @@
 #pragma once
 
-#include "node.h"
 #include "field.h"
 
 template <int Size>
