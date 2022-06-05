@@ -191,11 +191,12 @@ void Dequeue<T>::Delete(){
 
   Node<T> *ptr = Head;
   Node<T> *next;
-  Head = NULL;
+  free(Head);
+  free(Tail);
 
   while(ptr != NULL){
     next = ptr->Next;
-    free(ptr);
+    delete ptr;
     ptr = next;
   }
 }

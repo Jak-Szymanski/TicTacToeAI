@@ -2,21 +2,28 @@
 #include "edge.h"
 
 #include <windows.h>
+#include <chrono>
 
 int main(){
-
-    const int size=3;
-    GameState<size> tablica;
+ 
     int x;
     int y;
+    int* alpha = new int(100);
+    int* beta = new int(-100);
 
-    Vertex<size> *V1 = new Vertex<size>();
-    Graph<size> graph;
-    std::cout << "Rozmiar planszy: " << size << std::endl;
+    Vertex *V1 = new Vertex();
+    Graph graph;
+
+
+    std::cout << "Podaj rozmiar planszy: " << std::endl;
+    std::cin >> BOARD_SIZE;
+
+    GameState tablica;
+
     
     while(1){
         std::cout << "Ruch gracza: " << std::endl;
-        if (tablica.NextMove == -1) {
+        if (tablica.GetNextMove() == -1) {
             std::cout << "X";
             std::cout << std::endl << "Podaj ruch" << std::endl;
 
@@ -41,12 +48,13 @@ int main(){
             std::cout << "O";
             std::cout << std::endl << "Ruch komputera: " << std::endl;
             V1 = graph.InsertVertex(tablica);
-            graph.CreateFutureMovesTree(V1, SEARCH_DEPTH);   
-            graph.Minimax(V1);
+            auto start = std::chrono::steady_clock::now();
+            graph.CreateFutureMovesTree(V1, SEARCH_DEPTH); 
+            graph.Minimax(V1, alpha, beta);
+            auto end = std::chrono::steady_clock::now();
+            std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count() << std::endl;
             tablica.InsertBoard(graph.GetMaxMove(V1)); 
-            tablica.ChangeMove(); 
-            graph.Delete();
-           // Sleep(1000);       
+            tablica.ChangeMove();      
         } 
 
         std::cout << tablica << std::endl;
@@ -64,4 +72,6 @@ int main(){
             break;
         }        
     }
+    delete alpha;
+    delete beta;
 }

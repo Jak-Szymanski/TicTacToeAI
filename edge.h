@@ -2,39 +2,39 @@
 
 #include "vertex.h"
 
-template <int Size>
+
 class Edge{
 
     private:
 
         int Object;
 
-        Vertex<Size>* Start;
+        Vertex* Start;
 
-        Vertex<Size>* End;
+        Vertex* End;
 
-        Node<Edge<Size>>* Pos;
+        Node<Edge>* Pos;
 
     public:
 
         Edge();
 
-        Edge(int x, Vertex<Size>* new_start, Vertex<Size>* new_end);
+        Edge(int x, Vertex* new_start, Vertex* new_end);
     
-        Node<Edge<Size>>* GetPos() const {return Pos;};
+        Node<Edge>* GetPos() const {return Pos;};
 
-        void SetPos(Node<Edge<Size>>* new_pos) {Pos = new_pos;};
+        void SetPos(Node<Edge>* new_pos) {Pos = new_pos;};
 
         int GetObject() const {return Object;};
 
-        Vertex<Size> GetStart() const {return *Start;};
+        Vertex GetStart() const {return *Start;};
 
-        Vertex<Size> GetEnd() const {return *End;};
+        Vertex GetEnd() const {return *End;};
 
 };
 
-template<int Size>
-std::ostream &operator << (std::ostream &out, Edge<Size> const &edge){
+
+std::ostream &operator << (std::ostream &out, Edge const &edge){
     out << "Poczatek: " << std::endl;
     out << edge.GetStart() << std::endl;
     out << "Koniec: " << std::endl;
@@ -45,8 +45,8 @@ std::ostream &operator << (std::ostream &out, Edge<Size> const &edge){
 }
 
 
-template <int Size>
-Edge<Size>::Edge(){
+
+Edge::Edge(){
 
     Object = 0;
     Start = NULL;
@@ -54,8 +54,8 @@ Edge<Size>::Edge(){
     Pos = NULL;
 }
 
-template <int Size>
-Edge<Size>::Edge(int x, Vertex<Size>* new_start, Vertex<Size>* new_end){
+
+Edge::Edge(int x, Vertex* new_start, Vertex* new_end){
 
     Object = x;
     Start = new_start;

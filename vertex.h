@@ -2,55 +2,55 @@
 
 #include "field.h"
 
-template <int Size>
+
 class Vertex{
 
     private:
 
-        GameState<Size> Object;
+        GameState Object;
 
-        Node<Vertex<Size>> *Pos;
+        Node<Vertex> *Pos;
 
     public:
 
         Vertex();
 
-        Vertex(GameState<Size> x);
+        Vertex(GameState x);
 
-        Node<Vertex<Size>>* GetPos() const {return Pos;};
+        Node<Vertex>* GetPos() const {return Pos;};
 
-        void SetPos(Node<Vertex<Size>>* new_pos) {Pos = new_pos;};
+        void SetPos(Node<Vertex>* new_pos) {Pos = new_pos;};
 
-        GameState<Size> GetObject() const {return Object;};
+        GameState GetObject() const {return Object;};
 
-        bool operator == (const Vertex<Size> &V) const;
+        bool operator == (const Vertex &V) const;
 
         void SetCost(int new_cost) {Object.SetCost(new_cost);};
 };
 
-template<int Size>
-std::ostream &operator << (std::ostream &out, Vertex<Size> const &vertex){
+
+std::ostream &operator << (std::ostream &out, Vertex const &vertex){
     out << vertex.GetObject();
     return out;
 }
 
 
-template <int Size>
-Vertex<Size>::Vertex(){
 
-    Object = GameState<Size>();
+Vertex::Vertex(){
+
+    Object = GameState();
     Pos = NULL;
 }
 
-template <int Size>
-Vertex<Size>::Vertex(GameState<Size> x){
 
-    Object = x;
+Vertex::Vertex(GameState x){
+
+    Object = GameState(x);
     Pos = NULL;    
 }
 
-template<int Size>
-bool Vertex<Size>::operator== (const Vertex<Size> &V) const{
+
+bool Vertex::operator== (const Vertex &V) const{
 
     return (Object == V.GetObject() && Pos == V.GetPos());
 }
