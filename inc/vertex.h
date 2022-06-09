@@ -1,6 +1,6 @@
 #pragma once
 
-#include "field.h"
+#include "gamestate.h"
 
 
 class Vertex{
@@ -29,29 +29,5 @@ class Vertex{
 };
 
 
-std::ostream &operator << (std::ostream &out, Vertex const &vertex){
-    out << vertex.GetObject();
-    return out;
-}
-
-
-
-Vertex::Vertex(){
-
-    Object = GameState();
-    Pos = NULL;
-}
-
-
-Vertex::Vertex(GameState x){
-
-    Object = GameState(x);
-    Pos = NULL;    
-}
-
-
-bool Vertex::operator== (const Vertex &V) const{
-
-    return (Object == V.GetObject() && Pos == V.GetPos());
-}
+std::ostream &operator << (std::ostream &out, Vertex const &vertex);
 

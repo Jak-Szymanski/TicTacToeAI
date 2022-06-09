@@ -1,48 +1,4 @@
-#pragma once
-
-#define SEARCH_DEPTH 3
-
-#include "dequeue.h"
-#include "edge.h"
-
-
-class Graph{
-
-    private:
-
-        Dequeue<Vertex> VQueue;
-
-        Dequeue<Edge> EQueue;
-
-    public:
-
-        Dequeue<Vertex> Vertices() const {return VQueue;};
-
-        Dequeue<Edge> Edges() const {return EQueue;};
-
-        Vertex* InsertVertex(GameState x);
-
-        Edge InsertEdge(int x, Vertex* start, Vertex* end);
-
-        Dequeue<Edge> IncidentEdges(Vertex *V) const;
-
-        Dequeue<Vertex> AdjacentVertices(Vertex *V) const;
-
-        void Delete();
-
-        void CreateFutureMovesTree(Vertex* V1, int i);
-
-        int Min(Vertex *V, int *alpha, int *beta);
-
-        int Max(Vertex *V, int *alpha, int *beta);
-
-        int Minimax(Vertex *V, int* alpha, int* beta);
-
-        GameState GetMaxMove(Vertex *V);
-};
-
-
-
+#include "./inc/graph.h"
 
 void Graph::CreateFutureMovesTree (Vertex* V1, int i){
 
@@ -58,7 +14,7 @@ void Graph::CreateFutureMovesTree (Vertex* V1, int i){
         tmp_gs = possible_moves.RemoveFirst();
         V2 = InsertVertex(tmp_gs);
         InsertEdge(1,V1,V2);
-        if(tmp_gs.Cost != BOARD_SIZE && tmp_gs.Cost != -BOARD_SIZE){
+        if(tmp_gs.GetCost() != BOARD_SIZE && tmp_gs.GetCost() != -BOARD_SIZE){
             CreateFutureMovesTree(V2, i-1);
         }
     }
@@ -135,12 +91,12 @@ int Graph::Min(Vertex *V, int *alpha, int* beta){
 
     Dequeue<Vertex> adjacent = AdjacentVertices(V);
     int min = 100;
-    int tmp_cost;
+    int cost;
 
     while(!adjacent.IsEmpty()){
-        tmp_cost = adjacent.RemoveFirst().GetObject().GetCost();
-        if(tmp_cost < min){
-            min = tmp_cost;
+        cost = adjacent.RemoveFirst().GetObject().GetCost();
+        if(cost < min){
+            min = cost;
         }
     }
     
@@ -149,7 +105,7 @@ int Graph::Min(Vertex *V, int *alpha, int* beta){
 
     V->SetCost(min);
 
-    if(min > *beta) return 1;
+    if(min >= *beta) return 1;
     else return 0;
 }
 
@@ -159,12 +115,12 @@ int Graph::Max(Vertex *V, int *alpha, int *beta){
 
     Dequeue<Vertex> adjacent = AdjacentVertices(V);
     int max = -100;
-    int tmp_cost;
+    int cost;
 
     while(!adjacent.IsEmpty()){
-        tmp_cost = adjacent.RemoveFirst().GetObject().GetCost();
-        if(tmp_cost > max){
-            max = tmp_cost;
+        cost = adjacent.RemoveFirst().GetObject().GetCost();
+        if(cost > max){
+            max = cost;
         }
     }
 
@@ -172,39 +128,40 @@ int Graph::Max(Vertex *V, int *alpha, int *beta){
 
     V->SetCost(max);
 
-    if(max < *alpha) return 1;
+    if(max <= *alpha) return 1;
     else return 0;
 }
 
 
 int Graph::Minimax(Vertex *V, int* alpha, int* beta){
 
-    if (IncidentEdges(V).IsEmpty()){
-        if(V->GetObject().NextMove == 1){
+    Dequeue<Vertex> adjacent = AdjacentVertices(V);
+
+    if (adjacent.IsEmpty()){
+/*         if(V->GetObject().NextMove == 1){
             Max(V, alpha, beta);
         } else {
             Min(V, alpha, beta);
-        }
+        } */
         return 0;
     }
 
-    Dequeue<Vertex>* adjacent = &AdjacentVertices(V);
-
-    while (!adjacent->IsEmpty()){
-        if(Minimax(&adjacent->RemoveFirst(), alpha, beta)==1){
-            while(!adjacent->IsEmpty()){
-                adjacent->RemoveFirst();
+    while (!adjacent.IsEmpty()){
+        if(Minimax(&adjacent.RemoveFirst(), alpha, beta)==1){
+            while(!adjacent.IsEmpty()){
+                adjacent.RemoveFirst();
             }
             break;
         }
     }
+    *beta = -100;
+    *alpha = 100;
 
-    if(V->GetObject().NextMove == 1){
-        Max(V, alpha, beta);
+    if(V->GetObject().GetNextMove() == 1){
+        return Max(V, alpha, beta);
     } else {
-        Min(V, alpha, beta);
+        return Min(V, alpha, beta);
     }
-    return 0;
 }
 
 

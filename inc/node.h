@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "vertex.hh"
+
 #include <string>
 #include <fstream> 
 #include <iostream>
@@ -21,10 +21,6 @@ class Node{
     Node();
 
     Node(Type new_elem);
-
-    //int GetKey() const{return Elem.Key;};
-
-    //std::string GetMessage() const{return Elem.Message;};
 
     Node<Type> * const GetNext() const{return Next;};
 

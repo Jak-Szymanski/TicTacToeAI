@@ -1,5 +1,4 @@
-#include "graph.h"
-#include "edge.h"
+#include "./inc/graph.h"
 
 #include <windows.h>
 #include <chrono>
@@ -10,6 +9,9 @@ int main(){
     int y;
     int* alpha = new int(100);
     int* beta = new int(-100);
+    int zapis = 0;
+
+    std::ofstream outputfile("test.csv");
 
     Vertex *V1 = new Vertex();
     Graph graph;
@@ -17,6 +19,9 @@ int main(){
 
     std::cout << "Podaj rozmiar planszy: " << std::endl;
     std::cin >> BOARD_SIZE;
+
+    std::cout << "Czy robić zapis? "<< std::endl;
+    std::cin >> zapis;
 
     GameState tablica;
 
@@ -53,8 +58,13 @@ int main(){
             graph.Minimax(V1, alpha, beta);
             auto end = std::chrono::steady_clock::now();
             std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count() << std::endl;
+
             tablica.InsertBoard(graph.GetMaxMove(V1)); 
             tablica.ChangeMove();      
+
+            if(zapis){
+            outputfile << tablica << std::endl << std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count() << std::endl << std::endl;
+            }
         } 
 
         std::cout << tablica << std::endl;
@@ -74,4 +84,5 @@ int main(){
     }
     delete alpha;
     delete beta;
+    delete V1;
 }

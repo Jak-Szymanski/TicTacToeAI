@@ -1,87 +1,25 @@
-#pragma once
+#include "./inc/gamestate.h"
 
-#include "dequeue.h"
-#include "size.h"
-#include <vector>
-
-#define OUTSIDE_BOARD_ERR 1
-#define INCORRECT_TYPE_ERR 2
-#define SPACE_TAKEN_ERR 3
-
-#define DRAW -2
-#define POTENTIAL_DRAW -100
-
-class GameState{
-
-    public:
-
-        std::vector<std::vector<int>> Board;
-
-        int Cost;
-
-        int NextMove;
-
-    //public:
-
-        GameState();
-
-        GameState(const GameState &GS);
-
-        //~GameState();
-
-        void InsertChar(int x, int y);
-
-        void InsertBoard(GameState GS);
-
-       // GameState &operator = (const GameState& GS) {return *this;};
-
-        void DeleteChar(int x, int y);
-
-        int GetCost() {return Cost;};
-
-        void SetCost(int new_cost) {Cost = new_cost;};
-
-        int GetNextMove() {return NextMove;};
-
-        int CheckWinner();
-
-        int DetermineCost();
-
-        Dequeue<GameState> GeneratePossibleMoves() const;
-
-        void ChangeMove() {NextMove = -NextMove;};
-
-        bool operator == (const GameState &GS) const;
-
-};
-
+int BOARD_SIZE;
 
 std::ostream &operator << (std::ostream &out, GameState const &GS){
 
     for(int i=0;i<BOARD_SIZE;i++){
         for(int j=0;j<BOARD_SIZE;j++){
-            if (GS.Board[i][j] == -1) out << " X ";
-            if (GS.Board[i][j] == 0) out << "   ";
-            if (GS.Board[i][j] == 1) out << " O ";
+            if (GS.GetBoard()[i][j] == -1) out << " X ";
+            if (GS.GetBoard()[i][j] == 0) out << "   ";
+            if (GS.GetBoard()[i][j] == 1) out << " O ";
             if (j != BOARD_SIZE -1) out << "|";
         }
         out << std::endl;
     }
-    //out << "Koszt: " << GS.Cost << std::endl;
     return out;
 }
 
 
 GameState::GameState(){
 
-/*     for(int i=0;i<BOARD_SIZE;i++){
-        for(int j=0;j<BOARD_SIZE;j++){
-            Board[i][j] = 0;
-        }
-    } */
     Board.resize(BOARD_SIZE, std::vector<int>(BOARD_SIZE,0));
-/*     std::vector<std::vector<int>> tmp_Board (BOARD_SIZE, std::vector<int>(BOARD_SIZE,0));
-    Board = tmp_Board; */
     NextMove = -1;
     Cost = 0;
 }
@@ -90,40 +28,21 @@ GameState::GameState(){
 
 GameState::GameState(const GameState &GS){
 
-/*     Board = new int*[BOARD_SIZE];
-    for(int i=0;i<BOARD_SIZE;i++) {
-        Board[i] = new int[BOARD_SIZE];
-    } */
     Board.resize(BOARD_SIZE, std::vector<int>(BOARD_SIZE,0));
-/*     std::vector<std::vector<int>> tmp_Board (BOARD_SIZE, std::vector<int>(BOARD_SIZE,0));
-    Board = tmp_Board; */
     for(int i=0;i<BOARD_SIZE;i++){
         for(int j=0;j<BOARD_SIZE;j++){
             Board[i][j] = GS.Board[i][j];
         }
     }
 
-    //Board = GS.Board;
     NextMove = GS.NextMove;
     Cost = GS.Cost;
 }
 
 
-
-/* GameState::~GameState(){
-
-    for(int i=0;i<BOARD_SIZE;i++){
-        delete[] Board[i];
-    }
-    delete[] Board;
-} */
-
-
 void GameState::InsertChar(int x, int y){
 
     if (x >= BOARD_SIZE || y >= BOARD_SIZE || x < 0 || y < 0) throw OUTSIDE_BOARD_ERR;
-
-    //if (type < -1 || type > 1) throw INCORRECT_TYPE_ERR;
 
     if (Board[x][y] != 0) throw SPACE_TAKEN_ERR;
 
@@ -144,13 +63,7 @@ void GameState::DeleteChar(int x, int y){
 
     if (x >= BOARD_SIZE || y >= BOARD_SIZE || x < 0 || y < 0) throw OUTSIDE_BOARD_ERR;
 
-    //if (type < -1 || type > 1) throw INCORRECT_TYPE_ERR;
-
-    //if (Board[x][y] != 0) throw SPACE_TAKEN_ERR;
-
     Board[x][y] = 0;
-
-    //ChangeMove();
 }
 
 
@@ -254,7 +167,6 @@ int GameState::DetermineCost(){
     }
     k++;
 
-   // if(draw == 2*SIZE2+2) return POTENTIAL_DRAW;
     int smallest = 0;
     int biggest = 0;
 

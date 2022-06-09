@@ -43,7 +43,7 @@ class Dequeue{
 };
 
 
- template<typename Type>
+template<typename Type>
 std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue){
 
    if(dequeue.IsEmpty()){
@@ -132,6 +132,7 @@ Type Dequeue<Type>::RemoveFirst(){
   } else {
     Tail = NULL;
   }
+  delete ptr;
   return first;
 }
 
@@ -151,6 +152,7 @@ Type Dequeue<Type>::RemoveLast(){
   } else {
     Head = NULL;
   }
+  delete ptr;
   return last;
 }
 
@@ -175,6 +177,7 @@ Type Dequeue<Type>::Remove(int n){
     ptr = ptr->Next;
   }
   Type pack = ptr->Next->Elem;
+  Node<Type> *del = ptr->Next;    //Zachowuje wskaznik na usuwany element, by moc pozniej zwolnic jego pamiec
   if(ptr->Next->Next == NULL){
     Tail = ptr;
     ptr->Next = NULL;
@@ -182,6 +185,7 @@ Type Dequeue<Type>::Remove(int n){
   ptr->Next->Next->Prev = ptr->Next;
   ptr->Next = ptr->Next->Next;
   }
+  delete del;
   return pack;
 }  
 
