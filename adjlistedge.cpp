@@ -14,8 +14,8 @@ AdjacencyListEdge::AdjacencyListEdge(Edge E){
 
     SetObject(E.GetObject());
     SetPos(E.GetPos());
-    SetStart(&E.GetStart());
-    SetEnd(&E.GetEnd());
+    SetStart(std::make_shared<Vertex>(E.GetStart()));
+    SetEnd(std::make_shared<Vertex>(E.GetEnd()));
     AdjListStart = NULL;
     AdjListEnd = NULL;
 }

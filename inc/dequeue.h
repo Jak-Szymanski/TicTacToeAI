@@ -40,10 +40,13 @@ class Dequeue{
     void SetTail(Node<Type> *new_tail){Tail = new_tail;};
 
     void PrintEnd();
+
+    //friend std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue);
+
 };
 
 
-template<typename Type>
+/* template<typename Type>
 std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue){
 
    if(dequeue.IsEmpty()){
@@ -58,7 +61,7 @@ std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue){
   }
   out << ptr->GetElem(); 
   return out;
-}
+} */
 
 
 

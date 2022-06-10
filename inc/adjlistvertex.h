@@ -1,13 +1,12 @@
 #pragma once
 
-#include "vertex.h"
-#include "edge.h"
+#include "graph.h"
 
 class AdjacencyListVertex: public Vertex{
 
     private:
 
-        Dequeue<Edge*>* AdjListPos;
+        Dequeue<std::shared_ptr<Edge>>* AdjListPos;
 
     public:
 
@@ -15,5 +14,7 @@ class AdjacencyListVertex: public Vertex{
 
         AdjacencyListVertex(Vertex V);
 
-        void SetAdjListPos(Dequeue<Edge*>* new_adjlistpost) {AdjListPos = new_adjlistpost;};
+        void SetAdjListPos(Dequeue<std::shared_ptr<Edge>>* new_adjlistpos) {AdjListPos = new_adjlistpos;};
+
+        Dequeue<std::shared_ptr<Edge>>* GetAdjListPos() const {return AdjListPos;};
 };

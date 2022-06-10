@@ -1,11 +1,34 @@
 #include "./inc/graph.h"
 
-void Graph::CreateFutureMovesTree (Vertex* V1, int i){
+Graph::Graph(){
+
+    VQueue = Dequeue<std::shared_ptr<Vertex>>();
+    EQueue = Dequeue<std::shared_ptr<Edge>>();
+}
+
+Graph::Graph(const Graph &G){
+
+    Node<std::shared_ptr<Vertex>> *ptr_v = G.VQueue.GetHead();
+    while(ptr_v != NULL){
+        Vertex tmp_v = *ptr_v->GetElem();
+        VQueue.InsertEnd(std::make_shared<Vertex>(tmp_v));
+        ptr_v = ptr_v->GetNext();
+    }
+
+    Node<std::shared_ptr<Edge>> *ptr_e = G.EQueue.GetHead();
+    while(ptr_e != NULL){
+        Edge tmp_e = *ptr_e->GetElem();
+        EQueue.InsertEnd(std::make_shared<Edge>(tmp_e));
+        ptr_e = ptr_e->GetNext();
+    }
+}
+
+void Graph::CreateFutureMovesTree (std::shared_ptr<Vertex> V1, int i){
 
     if(i==0) return;
 
     Dequeue<GameState> possible_moves;
-    Vertex *V2 = new Vertex();   
+    auto V2 = std::make_shared<Vertex>();   
     GameState tmp_gs;
 
     possible_moves = V1->GetObject().GeneratePossibleMoves();
@@ -33,33 +56,33 @@ std::ostream &operator << (std::ostream &out, Graph const &graph){
 
 
 
-Vertex* Graph::InsertVertex(GameState x){
+std::shared_ptr<Vertex> Graph::InsertVertex(GameState x){
 
-    Vertex *V = new Vertex(x);
-    VQueue.InsertFront(*V);
-    VQueue.GetHead()->GetElem().SetPos(VQueue.GetHead());
+    auto V = std::make_shared<Vertex>(x);
+    VQueue.InsertFront(V);
+    VQueue.GetHead()->GetElem()->SetPos(VQueue.GetHead());
    //std::cout << *V << std::endl;
     return V;    
 }
 
 
-Edge Graph::InsertEdge(int x, Vertex* start, Vertex* end){
+std::shared_ptr<Edge> Graph::InsertEdge(int x, std::shared_ptr<Vertex> start, std::shared_ptr<Vertex> end){
 
-    Edge E(x,start,end);
+    auto E = std::make_shared<Edge>(x,start,end);
     EQueue.InsertFront(E);
-    EQueue.GetHead()->GetElem().SetPos(EQueue.GetHead());
+    EQueue.GetHead()->GetElem()->SetPos(EQueue.GetHead());
     return E;
 }
 
 
-Dequeue<Edge> Graph::IncidentEdges(Vertex *V) const{
+Dequeue<Edge> Graph::IncidentEdges(std::shared_ptr<Vertex> V) const{
 
     Dequeue<Edge> dequeue;
     
-    Node<Edge> *ptr = EQueue.GetHead();
+    Node<std::shared_ptr<Edge>> *ptr = EQueue.GetHead();
     while(ptr != NULL){
-        if (ptr->GetElem().GetStart() == *V){
-            dequeue.InsertFront(ptr->GetElem());
+        if (ptr->GetElem()->GetStart() == *V){
+            dequeue.InsertFront(*ptr->GetElem());
         }
         ptr = ptr->GetNext();
     }
@@ -67,7 +90,7 @@ Dequeue<Edge> Graph::IncidentEdges(Vertex *V) const{
 }
 
 
-Dequeue<Vertex> Graph::AdjacentVertices(Vertex *V) const{
+Dequeue<Vertex> Graph::AdjacentVertices(std::shared_ptr<Vertex> V) const{
 
     Dequeue<Edge> incident = IncidentEdges(V);
     Dequeue<Vertex> adjacent;
@@ -87,7 +110,7 @@ void Graph::Delete(){
 
 
 
-int Graph::Min(Vertex *V, int *alpha, int* beta){
+int Graph::Min(std::shared_ptr<Vertex> V, int *alpha, int* beta){
 
     Dequeue<Vertex> adjacent = AdjacentVertices(V);
     int min = 100;
@@ -111,7 +134,7 @@ int Graph::Min(Vertex *V, int *alpha, int* beta){
 
 
 
-int Graph::Max(Vertex *V, int *alpha, int *beta){
+int Graph::Max(std::shared_ptr<Vertex> V, int *alpha, int *beta){
 
     Dequeue<Vertex> adjacent = AdjacentVertices(V);
     int max = -100;
@@ -133,7 +156,7 @@ int Graph::Max(Vertex *V, int *alpha, int *beta){
 }
 
 
-int Graph::Minimax(Vertex *V, int* alpha, int* beta){
+int Graph::Minimax(std::shared_ptr<Vertex> V, int* alpha, int* beta){
 
     Dequeue<Vertex> adjacent = AdjacentVertices(V);
 
@@ -147,7 +170,7 @@ int Graph::Minimax(Vertex *V, int* alpha, int* beta){
     }
 
     while (!adjacent.IsEmpty()){
-        if(Minimax(&adjacent.RemoveFirst(), alpha, beta)==1){
+        if(Minimax(std::make_shared<Vertex>(adjacent.RemoveFirst()), alpha, beta)==1){
             while(!adjacent.IsEmpty()){
                 adjacent.RemoveFirst();
             }
@@ -165,7 +188,7 @@ int Graph::Minimax(Vertex *V, int* alpha, int* beta){
 }
 
 
-GameState Graph::GetMaxMove(Vertex *V){
+GameState Graph::GetMaxMove(std::shared_ptr<Vertex> V){
 
     Dequeue<Vertex> adjacent = AdjacentVertices(V);
     GameState GS;

@@ -1,37 +1,56 @@
 #include "./inc/adjlistgraph.h"
+//#include "./inc/dequeueptr.h"
 
-/* AdjacencyListGraph::AdjacencyListGraph(){
+std::ostream &operator << (std::ostream &out, AdjacencyListGraph const &graph){
 
-} */
+    Node<Dequeue<std::shared_ptr<Edge>>> *ptr = graph.AdjacencyList.GetHead();
 
-AdjacencyListGraph::AdjacencyListGraph(Graph G){
+    while(ptr != NULL){
+        out << "Sasiedztwo wierzcholka:" << std::endl;
+        out << ptr->GetElem() << std::endl;
 
-    Dequeue<Vertex> tmp_vertices = G.Vertices();
+        ptr = ptr->GetNext();
+    }
+    return out;
+}
+
+
+AdjacencyListGraph::AdjacencyListGraph(const Graph G){
+
+    Graph copyG(G);
+    Dequeue<std::shared_ptr<Vertex>> tmp_vertices = copyG.Vertices();
     Dequeue<Edge> tmp_incident;
-    Dequeue<AdjacencyListEdge*> tmp_adj;
+    Dequeue<std::shared_ptr<Edge>> tmp_adj;
     Edge tmp_edge;
-    Vertex tmp_vertex;
+    std::shared_ptr<Vertex> tmp_vertex;
 
     while(!tmp_vertices.IsEmpty()){
         tmp_vertex = tmp_vertices.RemoveFirst();
-        tmp_incident = G.IncidentEdges(&tmp_vertex);
+        tmp_incident = copyG.IncidentEdges(tmp_vertex);
         while(!tmp_incident.IsEmpty()){
             tmp_edge = tmp_incident.RemoveFirst();
-            AdjacencyListEdge *tmp_adjedge = new AdjacencyListEdge(tmp_edge);
+            std::shared_ptr<Edge> tmp_adjedge = std::dynamic_pointer_cast<Edge>(std::make_shared<AdjacencyListEdge>(tmp_edge));
             tmp_adj.InsertEnd(tmp_adjedge);
-            VQueue.InsertEnd(AdjacencyListVertex(tmp_vertex));
+            Vertices().InsertEnd(std::dynamic_pointer_cast<Vertex>(std::make_shared<AdjacencyListVertex>(*tmp_vertex)));
         }
-        AdjacencyList.InsertEnd(tmp_adj);
+        if(!tmp_adj.IsEmpty()) AdjacencyList.InsertEnd(tmp_adj);
     }
 
 
-/*     Dequeue<Vertex> Vertices = G.Vertices();
-    while(!tmp_vertices.IsEmpty()){
-        VQueue.InsertEnd(AdjacencyListVertex(tmp_vertices.RemoveFirst()));
-    } */
-
-    Dequeue<Edge> tmp_edges = G.Edges();
+    Dequeue<std::shared_ptr<Edge>> tmp_edges = copyG.Edges();
+    std::shared_ptr<Edge> tmp_edgeptr;
+   // AdjacencyListEdge tmp_adjedge;
     while(!tmp_edges.IsEmpty()){
-        EQueue.InsertEnd(AdjacencyListEdge(tmp_edges.RemoveFirst()));
+/*         tmp_edgeptr = tmp_edges.RemoveFirst();
+        tmp_adjedge = AdjacencyListEdge(*tmp_edgeptr);
+        tmp_adj = *tmp_adjedge.GetStart().GetAdjListPos();
+        Node<std::shared_ptr<Edge>>* ptr = tmp_adj.GetHead();
+        while(ptr != NULL){
+            if(ptr->GetElem())
+        }
+        */
+
+        tmp_edgeptr = std::dynamic_pointer_cast<Edge>(std::make_shared<AdjacencyListEdge>(*tmp_edges.RemoveFirst()));
+        Edges().InsertEnd(tmp_edgeptr);
     }
 }

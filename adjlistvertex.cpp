@@ -6,7 +6,6 @@ AdjacencyListVertex::AdjacencyListVertex(){
     SetPos(NULL);
     AdjListPos = NULL;
 
-
 }
 
 AdjacencyListVertex::AdjacencyListVertex(Vertex V){

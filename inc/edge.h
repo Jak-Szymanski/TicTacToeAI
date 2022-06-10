@@ -9,21 +9,21 @@ class Edge{
 
         int Object;
 
-        Vertex* Start;
+        std::shared_ptr<Vertex> Start;
 
-        Vertex* End;
+        std::shared_ptr<Vertex> End;
 
-        Node<Edge>* Pos;
+        Node<std::shared_ptr<Edge>>* Pos;
 
     public:
 
         Edge();
 
-        Edge(int x, Vertex* new_start, Vertex* new_end);
+        Edge(int x, std::shared_ptr<Vertex> new_start, std::shared_ptr<Vertex> new_end);
     
-        Node<Edge>* GetPos() const {return Pos;};
+        Node<std::shared_ptr<Edge>>* GetPos() const {return Pos;};
 
-        void SetPos(Node<Edge>* new_pos) {Pos = new_pos;};
+        void SetPos(Node<std::shared_ptr<Edge>>* new_pos) {Pos = new_pos;};
 
         int GetObject() const {return Object;};
 
@@ -31,11 +31,11 @@ class Edge{
 
         Vertex GetStart() const {return *Start;};
 
-        void SetStart(Vertex* new_start) {Start = new_start;};
+        void SetStart(std::shared_ptr<Vertex> new_start) {Start = new_start;};
 
         Vertex GetEnd() const {return *End;};
 
-        void SetEnd(Vertex* new_end) {End = new_end;};
+        void SetEnd(std::shared_ptr<Vertex> new_end) {End = new_end;};
 
         friend std::ostream &operator << (std::ostream &out, Edge const &edge);
 

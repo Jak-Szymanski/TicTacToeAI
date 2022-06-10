@@ -2,9 +2,9 @@
 
 std::ostream &operator << (std::ostream &out, Edge const &edge){
     out << "Poczatek: " << std::endl;
-    out << edge.Start << std::endl;
+    out << *edge.Start << std::endl;
     out << "Koniec: " << std::endl;
-    out << edge.End << std::endl;
+    out << *edge.End << std::endl;
     out << "Obiekt: " << std::endl;
     out << edge.Object << std::endl;
     return out;
@@ -21,7 +21,7 @@ Edge::Edge(){
 }
 
 
-Edge::Edge(int x, Vertex* new_start, Vertex* new_end){
+Edge::Edge(int x, std::shared_ptr<Vertex> new_start, std::shared_ptr<Vertex> new_end){
 
     Object = x;
     Start = new_start;

@@ -1,27 +1,23 @@
 #pragma once
 
-#include "graph.h"
-#include "adjlistvertex.h"
 #include "adjlistedge.h"
 
 
-class AdjacencyListGraph{
+class AdjacencyListGraph: public Graph{
 
     private:
 
-        Dequeue<AdjacencyListVertex> VQueue;
-
-        Dequeue<AdjacencyListEdge> EQueue;
-
-        Dequeue<Dequeue<AdjacencyListEdge*>> AdjacencyList;
+        Dequeue<Dequeue<std::shared_ptr<Edge>>> AdjacencyList;
 
     public:
 
         //AdjacencyListGraph();
 
-        AdjacencyListGraph(Graph G);
+        AdjacencyListGraph(const Graph G);
 
-        friend std::ostream &operator << (std::ostream &out, Graph const &graph);
+        friend std::ostream &operator << (std::ostream &out, AdjacencyListGraph const &graph);
+
+        //Dequeue<Dequeue<AdjacencyListEdge*>> GetAdjacencyList() const {return AdjacencyList;};
 
 };
 

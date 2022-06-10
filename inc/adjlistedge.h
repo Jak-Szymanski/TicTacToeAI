@@ -1,20 +1,24 @@
 #pragma once
 
-#include "edge.h"
+#include "adjlistvertex.h"
 
 class AdjacencyListEdge: public Edge{
 
     private:
 
-        AdjacencyListEdge** AdjListStart;
+        std::shared_ptr<Edge>* AdjListStart;
 
-        AdjacencyListEdge** AdjListEnd;
+        std::shared_ptr<Edge>* AdjListEnd;
 
     public:
 
         AdjacencyListEdge();
 
         AdjacencyListEdge(Edge E);
+
+        void SetAdjListStart(std::shared_ptr<Edge>* new_adjliststart) {AdjListStart = new_adjliststart;};
+
+        void SetAdjListEnd(std::shared_ptr<Edge>* new_adjlistend) {AdjListEnd = new_adjlistend;};
 
     
 };

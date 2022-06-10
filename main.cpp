@@ -1,4 +1,5 @@
-#include "./inc/graph.h"
+#include "./inc/adjlistgraph.h"
+#include "./inc/adjmatrixgraph.h"
 
 #include <windows.h>
 #include <chrono>
@@ -9,19 +10,16 @@ int main(){
     int y;
     int* alpha = new int(100);
     int* beta = new int(-100);
-    int zapis = 0;
 
-    std::ofstream outputfile("test.csv");
-
-    Vertex *V1 = new Vertex();
+    auto V1 = std::make_shared<Vertex>(); 
     Graph graph;
+
+
 
 
     std::cout << "Podaj rozmiar planszy: " << std::endl;
     std::cin >> BOARD_SIZE;
 
-    std::cout << "Czy robić zapis? "<< std::endl;
-    std::cin >> zapis;
 
     GameState tablica;
 
@@ -56,15 +54,18 @@ int main(){
             auto start = std::chrono::steady_clock::now();
             graph.CreateFutureMovesTree(V1, SEARCH_DEPTH); 
             graph.Minimax(V1, alpha, beta);
+
+            AdjacencyMatrixGraph adjgraph(graph);
+            std::cout << "size " << adjgraph.NumberVertices() << std::endl;
+            std::cout << adjgraph;
+
+
             auto end = std::chrono::steady_clock::now();
             std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count() << std::endl;
 
             tablica.InsertBoard(graph.GetMaxMove(V1)); 
-            tablica.ChangeMove();      
+            tablica.ChangeMove();   
 
-            if(zapis){
-            outputfile << tablica << std::endl << std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count() << std::endl << std::endl;
-            }
         } 
 
         std::cout << tablica << std::endl;
@@ -84,5 +85,4 @@ int main(){
     }
     delete alpha;
     delete beta;
-    delete V1;
 }

@@ -9,7 +9,7 @@ class Vertex{
 
         GameState Object;
 
-        Node<Vertex> *Pos;
+        Node<std::shared_ptr<Vertex>>* Pos;
 
     public:
 
@@ -17,9 +17,9 @@ class Vertex{
 
         Vertex(GameState x);
 
-        Node<Vertex>* GetPos() const {return Pos;};
+        Node<std::shared_ptr<Vertex>>* GetPos() const {return Pos;};
 
-        void SetPos(Node<Vertex>* new_pos) {Pos = new_pos;};
+        void SetPos(Node<std::shared_ptr<Vertex>>* new_pos) {Pos = new_pos;};
 
         GameState GetObject() const {return Object;};
 
@@ -28,6 +28,10 @@ class Vertex{
         bool operator == (const Vertex &V) const;
 
         void SetCost(int new_cost) {Object.SetCost(new_cost);};
+
+        //virtual Dequeue<std::shared_ptr<Edge>>* GetAdjListPos() const {return NULL;};
+
+        virtual int GetIndex() const {return 0;};
         
         friend std::ostream &operator << (std::ostream &out, Vertex const &vertex);        
 
