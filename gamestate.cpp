@@ -2,13 +2,13 @@
 
 int BOARD_SIZE;
 
-std::ostream &operator << (std::ostream &out, GameState const &GS){
+std::ostream &operator << (std::ostream &out, const GameState& GS){
 
     for(int i=0;i<BOARD_SIZE;i++){
         for(int j=0;j<BOARD_SIZE;j++){
-            if (GS.GetBoard()[i][j] == -1) out << " X ";
-            if (GS.GetBoard()[i][j] == 0) out << "   ";
-            if (GS.GetBoard()[i][j] == 1) out << " O ";
+            if (GS.Board[i][j] == -1) out << " X ";
+            if (GS.Board[i][j] == 0) out << "   ";
+            if (GS.Board[i][j] == 1) out << " O ";
             if (j != BOARD_SIZE -1) out << "|";
         }
         out << std::endl;

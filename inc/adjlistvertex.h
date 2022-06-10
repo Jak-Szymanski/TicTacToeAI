@@ -11,5 +11,9 @@ class AdjacencyListVertex: public Vertex{
 
     public:
 
+        AdjacencyListVertex();
 
+        AdjacencyListVertex(Vertex V);
+
+        void SetAdjListPos(Dequeue<Edge*>* new_adjlistpost) {AdjListPos = new_adjlistpost;};
 };

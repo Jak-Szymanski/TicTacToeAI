@@ -33,7 +33,7 @@ class GameState{
 
         void DeleteChar(int x, int y);
 
-        std::vector<std::vector<int>> GetBoard() const {return Board;};
+        //std::vector<std::vector<int>> GetBoard() const {return Board;};
 
         int GetCost() const {return Cost;};
 
@@ -51,7 +51,6 @@ class GameState{
 
         bool operator == (const GameState &GS) const;
 
+        friend std::ostream &operator<< (std::ostream &out, const GameState& GS);
+
 };
-
-
-std::ostream &operator << (std::ostream &out, GameState const &GS);

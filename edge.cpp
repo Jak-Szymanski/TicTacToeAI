@@ -2,11 +2,11 @@
 
 std::ostream &operator << (std::ostream &out, Edge const &edge){
     out << "Poczatek: " << std::endl;
-    out << edge.GetStart() << std::endl;
+    out << edge.Start << std::endl;
     out << "Koniec: " << std::endl;
-    out << edge.GetEnd() << std::endl;
+    out << edge.End << std::endl;
     out << "Obiekt: " << std::endl;
-    out << edge.GetObject() << std::endl;
+    out << edge.Object << std::endl;
     return out;
 }
 

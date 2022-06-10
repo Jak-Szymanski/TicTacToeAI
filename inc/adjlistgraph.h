@@ -2,6 +2,8 @@
 
 #include "graph.h"
 #include "adjlistvertex.h"
+#include "adjlistedge.h"
+
 
 class AdjacencyListGraph{
 
@@ -11,12 +13,15 @@ class AdjacencyListGraph{
 
         Dequeue<AdjacencyListEdge> EQueue;
 
-        Dequeue<Dequeue<Edge*>> AdjacencyList;
+        Dequeue<Dequeue<AdjacencyListEdge*>> AdjacencyList;
 
     public:
 
-        AdjacencyListGraph();
+        //AdjacencyListGraph();
 
         AdjacencyListGraph(Graph G);
 
+        friend std::ostream &operator << (std::ostream &out, Graph const &graph);
+
 };
+

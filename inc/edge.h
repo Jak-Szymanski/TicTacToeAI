@@ -27,11 +27,18 @@ class Edge{
 
         int GetObject() const {return Object;};
 
+        void SetObject(int new_object) {Object = new_object;};
+
         Vertex GetStart() const {return *Start;};
 
+        void SetStart(Vertex* new_start) {Start = new_start;};
+
         Vertex GetEnd() const {return *End;};
+
+        void SetEnd(Vertex* new_end) {End = new_end;};
+
+        friend std::ostream &operator << (std::ostream &out, Edge const &edge);
 
 };
 
 
-std::ostream &operator << (std::ostream &out, Edge const &edge);

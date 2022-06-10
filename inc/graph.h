@@ -40,6 +40,7 @@ class Graph{
         int Minimax(Vertex *V, int* alpha, int* beta);
 
         GameState GetMaxMove(Vertex *V);
+
+        friend std::ostream &operator << (std::ostream &out, Graph const &graph);
 };
 
-std::ostream &operator << (std::ostream &out, Graph const &graph);

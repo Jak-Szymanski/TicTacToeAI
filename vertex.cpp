@@ -1,7 +1,7 @@
 #include "./inc/vertex.h"
 
 std::ostream &operator << (std::ostream &out, Vertex const &vertex){
-    out << vertex.GetObject();
+    out << vertex.Object;
     return out;
 }
 

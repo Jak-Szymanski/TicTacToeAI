@@ -6,11 +6,15 @@ class AdjacencyListEdge: public Edge{
 
     private:
 
-        Edge** AdjListStart;
+        AdjacencyListEdge** AdjListStart;
 
-        Edge** AdjListStart;
+        AdjacencyListEdge** AdjListEnd;
 
     public:
+
+        AdjacencyListEdge();
+
+        AdjacencyListEdge(Edge E);
 
     
 };
