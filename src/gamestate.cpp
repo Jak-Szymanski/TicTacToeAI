@@ -1,4 +1,4 @@
-#include "./inc/gamestate.h"
+#include "../inc/gamestate.h"
 
 int BOARD_SIZE;
 

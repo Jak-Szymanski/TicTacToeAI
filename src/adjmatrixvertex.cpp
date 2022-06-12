@@ -1,4 +1,4 @@
-#include "./inc/adjmatrixvertex.h"
+#include "../inc/adjmatrixvertex.h"
 
 AdjacencyMatrixVertex::AdjacencyMatrixVertex(){
     

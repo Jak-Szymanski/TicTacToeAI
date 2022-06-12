@@ -1,4 +1,4 @@
-#include "./inc/dequeueptr.h"
+#include "../inc/dequeueptr.h"
 
 std::ostream &operator << (std::ostream &out, Dequeue<std::shared_ptr<Vertex>> const &dequeue){
 

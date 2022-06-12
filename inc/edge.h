@@ -29,13 +29,17 @@ class Edge{
 
         void SetObject(int new_object) {Object = new_object;};
 
-        Vertex GetStart() const {return *Start;};
+        std::shared_ptr<Vertex> GetStart() {return Start;};
 
         void SetStart(std::shared_ptr<Vertex> new_start) {Start = new_start;};
 
-        Vertex GetEnd() const {return *End;};
+        std::shared_ptr<Vertex> GetEnd() {return End;};
 
         void SetEnd(std::shared_ptr<Vertex> new_end) {End = new_end;};
+
+        virtual Node<std::shared_ptr<Edge>>* GetAdjListStart() {return NULL;};
+
+        virtual Node<std::shared_ptr<Edge>>* GetAdjListEnd() {return NULL;};
 
         friend std::ostream &operator << (std::ostream &out, Edge const &edge);
 

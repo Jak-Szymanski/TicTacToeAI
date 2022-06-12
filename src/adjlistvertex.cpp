@@ -1,4 +1,4 @@
-#include "./inc/adjlistvertex.h"
+#include "../inc/adjlistvertex.h"
 
 AdjacencyListVertex::AdjacencyListVertex(){
 

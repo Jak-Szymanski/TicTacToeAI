@@ -1,5 +1,5 @@
-#include "./inc/adjlistgraph.h"
-#include "./inc/adjmatrixgraph.h"
+#include "../inc/adjlistgraph.h"
+#include "../inc/adjmatrixgraph.h"
 
 #include <windows.h>
 #include <chrono>
@@ -11,8 +11,24 @@ int main(){
     int* alpha = new int(100);
     int* beta = new int(-100);
 
+/*     std::vector<std::vector<int>> test;
+    test.resize(3,std::vector<int>(3,0));
+    test[0][1] = test[1][0] = test[2][2] = 1;
+    test[0][2] = test[1][2] = test[2][0] = 2;
+    test.erase(test.begin());
+    for(int i=0; i<2;i++){
+        for(int j=0; j<3; j++){
+            std::cout << test[i][j] << " ";
+        }
+        std::cout << std::endl;
+    } */
+
     auto V1 = std::make_shared<Vertex>(); 
-    Graph graph;
+                             auto V2 = std::make_shared<Vertex>();  
+    auto Vdelete = std::make_shared<Vertex>();  
+
+    AdjacencyMatrixGraph graph;
+    // AdjacencyMatrixGraph graph;
 
 
 
@@ -50,14 +66,33 @@ int main(){
         else{
             std::cout << "O";
             std::cout << std::endl << "Ruch komputera: " << std::endl;
+    std::shared_ptr<Edge> E;
             V1 = graph.InsertVertex(tablica);
+            tablica.InsertChar(2,2);
+            V2 = graph.InsertVertex(tablica);
+            graph.InsertEdge(1, V1, V2);
+
+            Vdelete = graph.InsertVertex(tablica);
+            tablica.InsertChar(0,0);
+            V2 = graph.InsertVertex(tablica);
+            E = graph.InsertEdge(1, Vdelete, V2);
+            
+            V1 = graph.InsertVertex(tablica);
+            tablica.InsertChar(0,2);
+            V2 = graph.InsertVertex(tablica);
+            graph.InsertEdge(1, V1, V2);
+
+            
+            graph.RemoveVertex(Vdelete);
+            std::cout << graph;
+            
+            
+
             auto start = std::chrono::steady_clock::now();
             graph.CreateFutureMovesTree(V1, SEARCH_DEPTH); 
+                //std::cout << graph;
             graph.Minimax(V1, alpha, beta);
 
-            AdjacencyMatrixGraph adjgraph(graph);
-            std::cout << "size " << adjgraph.NumberVertices() << std::endl;
-            std::cout << adjgraph;
 
 
             auto end = std::chrono::steady_clock::now();
@@ -65,6 +100,7 @@ int main(){
 
             tablica.InsertBoard(graph.GetMaxMove(V1)); 
             tablica.ChangeMove();   
+                                                                            // graph.Delete();
 
         } 
 

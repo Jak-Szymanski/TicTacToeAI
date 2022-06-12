@@ -6,9 +6,9 @@ class AdjacencyListEdge: public Edge{
 
     private:
 
-        std::shared_ptr<Edge>* AdjListStart;
+        Node<std::shared_ptr<Edge>>* AdjListStart;
 
-        std::shared_ptr<Edge>* AdjListEnd;
+        Node<std::shared_ptr<Edge>>* AdjListEnd;
 
     public:
 
@@ -16,9 +16,16 @@ class AdjacencyListEdge: public Edge{
 
         AdjacencyListEdge(Edge E);
 
-        void SetAdjListStart(std::shared_ptr<Edge>* new_adjliststart) {AdjListStart = new_adjliststart;};
+        AdjacencyListEdge(int x, std::shared_ptr<Vertex> new_start, std::shared_ptr<Vertex> new_end);
 
-        void SetAdjListEnd(std::shared_ptr<Edge>* new_adjlistend) {AdjListEnd = new_adjlistend;};
+        void SetAdjListStart(Node<std::shared_ptr<Edge>>* new_adjliststart) {AdjListStart = new_adjliststart;};
+
+        void SetAdjListEnd(Node<std::shared_ptr<Edge>>* new_adjlistend) {AdjListEnd = new_adjlistend;};
+
+        Node<std::shared_ptr<Edge>>* GetAdjListStart() {return AdjListStart;};
+
+        Node<std::shared_ptr<Edge>>* GetAdjListEnd() {return AdjListEnd;};
+
 
     
 };

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GRAPH_H
+#define GRAPH_H
 
 #include "dequeueptr.h"
 
@@ -21,17 +22,27 @@ class Graph{
 
         Graph(const Graph &G);
 
-        Dequeue<std::shared_ptr<Vertex>> Vertices() const {return VQueue;};
+        Dequeue<std::shared_ptr<Vertex>>* Vertices(){return &VQueue;};
 
-        Dequeue<std::shared_ptr<Edge>> Edges() const {return EQueue;};
+        Dequeue<std::shared_ptr<Edge>>* Edges(){return &EQueue;};
 
-        std::shared_ptr<Vertex> InsertVertex(GameState x);
+/*         Dequeue<std::shared_ptr<Vertex>> Vertices() const {return VQueue;};
 
-        std::shared_ptr<Edge> InsertEdge(int x, std::shared_ptr<Vertex> start, std::shared_ptr<Vertex> end);
+        Dequeue<std::shared_ptr<Edge>> Edges() const {return EQueue;}; */
 
-        Dequeue<Edge> IncidentEdges(std::shared_ptr<Vertex> V) const;
+        virtual std::shared_ptr<Vertex> InsertVertex(GameState x);
 
-        Dequeue<Vertex> AdjacentVertices(std::shared_ptr<Vertex> V) const;
+        virtual std::shared_ptr<Edge> InsertEdge(int x, std::shared_ptr<Vertex> start, std::shared_ptr<Vertex> end);
+
+        virtual Dequeue<std::shared_ptr<Edge>> IncidentEdges(std::shared_ptr<Vertex> V) const;
+
+        virtual Dequeue<std::shared_ptr<Vertex>> AdjacentVertices(std::shared_ptr<Vertex> V) const;
+
+        virtual bool AreAdjacent(std::shared_ptr<Vertex> V1, std::shared_ptr<Vertex> V2) const;
+
+        virtual void RemoveEdge(std::shared_ptr<Edge> E);
+
+        virtual void RemoveVertex(std::shared_ptr<Vertex> V);
 
         int NumberVertices() const {return VQueue.Size();};
 
@@ -49,6 +60,8 @@ class Graph{
 
         GameState GetMaxMove(std::shared_ptr<Vertex> V);
 
-        friend std::ostream &operator << (std::ostream &out, Graph const &graph);
+        friend std::ostream &operator << (std::ostream &out, Graph &graph);
 };
+
+#endif
 

@@ -1,6 +1,7 @@
-#include "./inc/edge.h"
+#include "../inc/edge.h"
 
 std::ostream &operator << (std::ostream &out, Edge const &edge){
+
     out << "Poczatek: " << std::endl;
     out << *edge.Start << std::endl;
     out << "Koniec: " << std::endl;

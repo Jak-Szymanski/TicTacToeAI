@@ -2,6 +2,7 @@
 
 #include "gamestate.h"
 
+class Edge;
 
 class Vertex{
 
@@ -31,7 +32,13 @@ class Vertex{
 
         //virtual Dequeue<std::shared_ptr<Edge>>* GetAdjListPos() const {return NULL;};
 
-        virtual int GetIndex() const {return 0;};
+        virtual int GetIndex() const {return 2;};
+
+        virtual void SetIndex(int new_index){};
+
+        virtual Dequeue<std::shared_ptr<Edge>>* GetAdjListPos() {return NULL;};
+
+        virtual void SetAdjListPos(Dequeue<std::shared_ptr<Edge>>* new_adjlistpos){};
         
         friend std::ostream &operator << (std::ostream &out, Vertex const &vertex);        
 

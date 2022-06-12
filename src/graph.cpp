@@ -1,4 +1,4 @@
-#include "./inc/graph.h"
+#include "../inc/graph.h"
 
 Graph::Graph(){
 
@@ -48,9 +48,9 @@ void Graph::CreateFutureMovesTree (std::shared_ptr<Vertex> V1, int i){
 
 
 
-std::ostream &operator << (std::ostream &out, Graph const &graph){
-    out << "Wierzcholki: " << std::endl << graph.Vertices();
-    out << "Krawedzie: " << std::endl << graph.Edges();
+std::ostream &operator << (std::ostream &out, Graph &graph){
+    out << "Wierzcholki: " << std::endl << *graph.Vertices();
+    out << "Krawedzie: " << std::endl << *graph.Edges();
     return out;
 }
 
@@ -59,9 +59,9 @@ std::ostream &operator << (std::ostream &out, Graph const &graph){
 std::shared_ptr<Vertex> Graph::InsertVertex(GameState x){
 
     auto V = std::make_shared<Vertex>(x);
+
     VQueue.InsertFront(V);
     VQueue.GetHead()->GetElem()->SetPos(VQueue.GetHead());
-   //std::cout << *V << std::endl;
     return V;    
 }
 
@@ -69,20 +69,21 @@ std::shared_ptr<Vertex> Graph::InsertVertex(GameState x){
 std::shared_ptr<Edge> Graph::InsertEdge(int x, std::shared_ptr<Vertex> start, std::shared_ptr<Vertex> end){
 
     auto E = std::make_shared<Edge>(x,start,end);
+
     EQueue.InsertFront(E);
     EQueue.GetHead()->GetElem()->SetPos(EQueue.GetHead());
     return E;
 }
 
 
-Dequeue<Edge> Graph::IncidentEdges(std::shared_ptr<Vertex> V) const{
+Dequeue<std::shared_ptr<Edge>> Graph::IncidentEdges(std::shared_ptr<Vertex> V) const{
 
-    Dequeue<Edge> dequeue;
+    Dequeue<std::shared_ptr<Edge>> dequeue;
     
     Node<std::shared_ptr<Edge>> *ptr = EQueue.GetHead();
     while(ptr != NULL){
-        if (ptr->GetElem()->GetStart() == *V){
-            dequeue.InsertFront(*ptr->GetElem());
+        if (*ptr->GetElem()->GetStart() == *V){
+            dequeue.InsertFront(ptr->GetElem());
         }
         ptr = ptr->GetNext();
     }
@@ -90,15 +91,69 @@ Dequeue<Edge> Graph::IncidentEdges(std::shared_ptr<Vertex> V) const{
 }
 
 
-Dequeue<Vertex> Graph::AdjacentVertices(std::shared_ptr<Vertex> V) const{
+Dequeue<std::shared_ptr<Vertex>> Graph::AdjacentVertices(std::shared_ptr<Vertex> V) const{
 
-    Dequeue<Edge> incident = IncidentEdges(V);
-    Dequeue<Vertex> adjacent;
+    Dequeue<std::shared_ptr<Edge>> incident = IncidentEdges(V);
+    Dequeue<std::shared_ptr<Vertex>> adjacent;
 
     while(!incident.IsEmpty()){
-        adjacent.InsertFront(incident.RemoveFirst().GetEnd());
+        adjacent.InsertFront(incident.RemoveFirst()->GetEnd());
     }
     return adjacent;
+}
+
+bool Graph::AreAdjacent(std::shared_ptr<Vertex> V1, std::shared_ptr<Vertex> V2) const {
+
+    Node<std::shared_ptr<Edge>>* ptr = EQueue.GetHead();
+
+    while(ptr != NULL){
+        if(ptr->GetElem()->GetStart() == V1 && ptr->GetElem()->GetEnd() == V2) return true;
+        ptr = ptr->GetNext();
+    }
+    return false;
+}
+
+void Graph::RemoveEdge(std::shared_ptr<Edge> E){
+
+    Node<std::shared_ptr<Edge>>* ptr = E->GetPos();
+
+    if(ptr == EQueue.GetHead()){
+        EQueue.RemoveFirst();
+        return;
+    } 
+    if(ptr == EQueue.GetTail()){
+        EQueue.RemoveLast();
+        return;
+    }
+
+    ptr->GetPrev()->SetNext(ptr->GetNext());
+    ptr->GetNext()->SetPrev(ptr->GetPrev());
+    delete ptr;
+}
+
+void Graph::RemoveVertex(std::shared_ptr<Vertex> V){
+
+   Node<std::shared_ptr<Edge>>* ptr_e = IncidentEdges(V).GetHead();
+
+    while(ptr_e != NULL){
+        RemoveEdge(ptr_e->GetElem());
+        ptr_e = ptr_e->GetNext();
+    }
+
+    Node<std::shared_ptr<Vertex>>* ptr_v = V->GetPos();
+
+    if(ptr_v == VQueue.GetHead()){
+        VQueue.RemoveFirst();
+        return;
+    } 
+    if(ptr_v == VQueue.GetTail()){
+        VQueue.RemoveLast();
+        return;
+    }
+
+    ptr_v->GetPrev()->SetNext(ptr_v->GetNext());
+    ptr_v->GetNext()->SetPrev(ptr_v->GetPrev());
+    delete ptr_v;
 }
 
 
@@ -112,12 +167,12 @@ void Graph::Delete(){
 
 int Graph::Min(std::shared_ptr<Vertex> V, int *alpha, int* beta){
 
-    Dequeue<Vertex> adjacent = AdjacentVertices(V);
+    Dequeue<std::shared_ptr<Vertex>> adjacent = AdjacentVertices(V);
     int min = 100;
     int cost;
 
     while(!adjacent.IsEmpty()){
-        cost = adjacent.RemoveFirst().GetObject().GetCost();
+        cost = adjacent.RemoveFirst()->GetObject().GetCost();
         if(cost < min){
             min = cost;
         }
@@ -136,12 +191,12 @@ int Graph::Min(std::shared_ptr<Vertex> V, int *alpha, int* beta){
 
 int Graph::Max(std::shared_ptr<Vertex> V, int *alpha, int *beta){
 
-    Dequeue<Vertex> adjacent = AdjacentVertices(V);
+    Dequeue<std::shared_ptr<Vertex>> adjacent = AdjacentVertices(V);
     int max = -100;
     int cost;
 
     while(!adjacent.IsEmpty()){
-        cost = adjacent.RemoveFirst().GetObject().GetCost();
+        cost = adjacent.RemoveFirst()->GetObject().GetCost();
         if(cost > max){
             max = cost;
         }
@@ -158,7 +213,7 @@ int Graph::Max(std::shared_ptr<Vertex> V, int *alpha, int *beta){
 
 int Graph::Minimax(std::shared_ptr<Vertex> V, int* alpha, int* beta){
 
-    Dequeue<Vertex> adjacent = AdjacentVertices(V);
+    Dequeue<std::shared_ptr<Vertex>> adjacent = AdjacentVertices(V);
 
     if (adjacent.IsEmpty()){
 /*         if(V->GetObject().NextMove == 1){
@@ -170,7 +225,7 @@ int Graph::Minimax(std::shared_ptr<Vertex> V, int* alpha, int* beta){
     }
 
     while (!adjacent.IsEmpty()){
-        if(Minimax(std::make_shared<Vertex>(adjacent.RemoveFirst()), alpha, beta)==1){
+        if(Minimax(adjacent.RemoveFirst(), alpha, beta)==1){
             while(!adjacent.IsEmpty()){
                 adjacent.RemoveFirst();
             }
@@ -190,11 +245,11 @@ int Graph::Minimax(std::shared_ptr<Vertex> V, int* alpha, int* beta){
 
 GameState Graph::GetMaxMove(std::shared_ptr<Vertex> V){
 
-    Dequeue<Vertex> adjacent = AdjacentVertices(V);
+    Dequeue<std::shared_ptr<Vertex>> adjacent = AdjacentVertices(V);
     GameState GS;
 
     while(!adjacent.IsEmpty()){
-        GS = adjacent.RemoveFirst().GetObject();
+        GS = adjacent.RemoveFirst()->GetObject();
         if(GS.GetCost() == V->GetObject().GetCost()){
             return GS;  
         }
