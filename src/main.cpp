@@ -27,7 +27,8 @@ int main(){
                              auto V2 = std::make_shared<Vertex>();  
     auto Vdelete = std::make_shared<Vertex>();  
 
-    AdjacencyMatrixGraph graph;
+    // Graph graph;
+    AdjacencyListGraph graph;
     // AdjacencyMatrixGraph graph;
 
 
@@ -66,35 +67,39 @@ int main(){
         else{
             std::cout << "O";
             std::cout << std::endl << "Ruch komputera: " << std::endl;
-    std::shared_ptr<Edge> E;
+            // V1 = graph.InsertVertex(tablica);
+
+
+            std::shared_ptr<Edge> E;
             V1 = graph.InsertVertex(tablica);
             tablica.InsertChar(2,2);
-            V2 = graph.InsertVertex(tablica);
-            graph.InsertEdge(1, V1, V2);
-
             Vdelete = graph.InsertVertex(tablica);
+            graph.InsertEdge(1, V1, Vdelete);
+
+            V1 = graph.InsertVertex(tablica);
             tablica.InsertChar(0,0);
             V2 = graph.InsertVertex(tablica);
-            E = graph.InsertEdge(1, Vdelete, V2);
+            graph.InsertEdge(1, V1, V2);
             
-            V1 = graph.InsertVertex(tablica);
+            V1= graph.InsertVertex(tablica);
             tablica.InsertChar(0,2);
             V2 = graph.InsertVertex(tablica);
-            graph.InsertEdge(1, V1, V2);
+            E = graph.InsertEdge(1, V1, V2);
 
             
-            graph.RemoveVertex(Vdelete);
+            //graph.RemoveVertex(Vdelete);
             std::cout << graph;
+
+            return 0;
+
+            //std::cout << std::endl << std::endl << std::endl << *graph.Edges();
             
-            
+            // return 0;
 
             auto start = std::chrono::steady_clock::now();
             graph.CreateFutureMovesTree(V1, SEARCH_DEPTH); 
                 //std::cout << graph;
             graph.Minimax(V1, alpha, beta);
-
-
-
             auto end = std::chrono::steady_clock::now();
             std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count() << std::endl;
 

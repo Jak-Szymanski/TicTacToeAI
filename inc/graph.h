@@ -26,13 +26,11 @@ class Graph{
 
         Dequeue<std::shared_ptr<Edge>>* Edges(){return &EQueue;};
 
-/*         Dequeue<std::shared_ptr<Vertex>> Vertices() const {return VQueue;};
-
-        Dequeue<std::shared_ptr<Edge>> Edges() const {return EQueue;}; */
-
         virtual std::shared_ptr<Vertex> InsertVertex(GameState x);
 
         virtual std::shared_ptr<Edge> InsertEdge(int x, std::shared_ptr<Vertex> start, std::shared_ptr<Vertex> end);
+
+        virtual Dequeue<std::shared_ptr<Edge>> StartingEdges(std::shared_ptr<Vertex> V) const;
 
         virtual Dequeue<std::shared_ptr<Edge>> IncidentEdges(std::shared_ptr<Vertex> V) const;
 

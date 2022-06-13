@@ -20,7 +20,7 @@ std::ostream &operator << (std::ostream &out, AdjacencyListGraph const &graph){
 
     while(ptr != NULL){
         out << "Sasiedztwo wierzcholka:" << std::endl;
-        out << ptr->GetElem() << std::endl;
+        out << &(ptr->GetElem()) << std::endl;
 
         ptr = ptr->GetNext();
     }
@@ -68,17 +68,30 @@ std::ostream &operator << (std::ostream &out, AdjacencyListGraph const &graph){
     }
 } */
 
+Dequeue<std::shared_ptr<Edge>> AdjacencyListGraph::StartingEdges(std::shared_ptr<Vertex> V) const{
+    
+    Dequeue<std::shared_ptr<Edge>> starting;
+    Node<std::shared_ptr<Edge>>* ptr = V->GetAdjList()->GetHead();
+
+    while(ptr != NULL){
+        if(ptr->GetElem()->GetEnd() != V) starting.InsertEnd(ptr->GetElem());
+        ptr = ptr->GetNext();
+    }
+    return starting;
+}
+
 Dequeue<std::shared_ptr<Edge>> AdjacencyListGraph::IncidentEdges(std::shared_ptr<Vertex> V) const{
-    return *V->GetAdjListPos();
+
+    return *V->GetAdjList();
 }
 
 Dequeue<std::shared_ptr<Vertex>> AdjacencyListGraph::AdjacentVertices(std::shared_ptr<Vertex> V) const {
     
     Dequeue<std::shared_ptr<Vertex>> tmp_adjacent;
-    Node<std::shared_ptr<Edge>>* ptr = V->GetAdjListPos()->GetHead();
+    Node<std::shared_ptr<Edge>>* ptr = V->GetAdjList()->GetHead();
 
     while(ptr != NULL){
-        tmp_adjacent.InsertEnd(ptr->GetElem()->GetEnd());
+        if(ptr->GetElem()->GetEnd() != V) tmp_adjacent.InsertEnd(ptr->GetElem()->GetEnd());
         ptr = ptr->GetNext();
     }
     return tmp_adjacent;
@@ -87,10 +100,13 @@ Dequeue<std::shared_ptr<Vertex>> AdjacencyListGraph::AdjacentVertices(std::share
 std::shared_ptr<Vertex> AdjacencyListGraph::InsertVertex(GameState x){
 
     auto V = std::make_shared<AdjacencyListVertex>(x);
-    Dequeue<std::shared_ptr<Edge>>* tmp_adjlist = new Dequeue<std::shared_ptr<Edge>>;
+    Dequeue<std::shared_ptr<Edge>>* tmp_adjlist = new Dequeue<std::shared_ptr<Edge>>();
 
+    
     AdjacencyList.InsertEnd(*tmp_adjlist);
-    V->SetAdjListPos(tmp_adjlist);
+    V->SetAdjList(tmp_adjlist);
+    std::cout << "vertex: " << tmp_adjlist << std::endl;
+
     Vertices()->InsertFront(V);
     Vertices()->GetHead()->GetElem()->SetPos(Vertices()->GetHead());
     return V;   
@@ -100,18 +116,27 @@ std::shared_ptr<Edge> AdjacencyListGraph::InsertEdge(int x, std::shared_ptr<Vert
 
     auto E = std::make_shared<AdjacencyListEdge>(x,start,end);
 
-    start->GetAdjListPos()->InsertEnd(E);
-    E->SetAdjListStart(start->GetAdjListPos()->GetTail());
-
-    Edges()->InsertFront(E);
+        Edges()->InsertFront(E);
     Edges()->GetHead()->GetElem()->SetPos(Edges()->GetHead());
+
+    std::cout << "edge: "<< start->GetAdjList() << std::endl << std::endl;
+
+    start->GetAdjList()->InsertEnd(E);
+
+    // std::cout << "po: "<< start->GetAdjList() << std::endl;
+    E->SetAdjListStart(start->GetAdjList()->GetTail());
+
+    end->GetAdjList()->InsertEnd(E);
+    E->SetAdjListEnd(end->GetAdjList()->GetTail());
+
+
 
     return E;
 }
 
 bool AdjacencyListGraph::AreAdjacent(std::shared_ptr<Vertex> V1, std::shared_ptr<Vertex> V2) const{
 
-    Node<std::shared_ptr<Edge>>* ptr = V1->GetAdjListPos()->GetHead();
+    Node<std::shared_ptr<Edge>>* ptr = V1->GetAdjList()->GetHead();
 
     while(ptr != NULL){
         if (ptr->GetElem()->GetEnd() == V2) return true;

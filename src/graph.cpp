@@ -76,7 +76,7 @@ std::shared_ptr<Edge> Graph::InsertEdge(int x, std::shared_ptr<Vertex> start, st
 }
 
 
-Dequeue<std::shared_ptr<Edge>> Graph::IncidentEdges(std::shared_ptr<Vertex> V) const{
+Dequeue<std::shared_ptr<Edge>> Graph::StartingEdges(std::shared_ptr<Vertex> V) const{
 
     Dequeue<std::shared_ptr<Edge>> dequeue;
     
@@ -90,10 +90,24 @@ Dequeue<std::shared_ptr<Edge>> Graph::IncidentEdges(std::shared_ptr<Vertex> V) c
     return dequeue;
 }
 
+Dequeue<std::shared_ptr<Edge>> Graph::IncidentEdges(std::shared_ptr<Vertex> V) const{
+
+    Dequeue<std::shared_ptr<Edge>> dequeue;
+    
+    Node<std::shared_ptr<Edge>> *ptr = EQueue.GetHead();
+    while(ptr != NULL){
+        if (*ptr->GetElem()->GetStart() == *V || *ptr->GetElem()->GetEnd() == *V){
+            dequeue.InsertFront(ptr->GetElem());
+        }
+        ptr = ptr->GetNext();
+    }
+    return dequeue;    
+}
+
 
 Dequeue<std::shared_ptr<Vertex>> Graph::AdjacentVertices(std::shared_ptr<Vertex> V) const{
 
-    Dequeue<std::shared_ptr<Edge>> incident = IncidentEdges(V);
+    Dequeue<std::shared_ptr<Edge>> incident = StartingEdges(V);
     Dequeue<std::shared_ptr<Vertex>> adjacent;
 
     while(!incident.IsEmpty()){

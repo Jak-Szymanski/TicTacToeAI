@@ -4,7 +4,7 @@ AdjacencyListVertex::AdjacencyListVertex(){
 
     SetObject(GameState());
     SetPos(NULL);
-    AdjListPos = NULL;
+    AdjList = NULL;
 
 }
 
@@ -12,6 +12,6 @@ AdjacencyListVertex::AdjacencyListVertex(Vertex V){
 
     SetObject(V.GetObject());
     SetPos(V.GetPos());
-    AdjListPos = NULL;
+    AdjList = NULL;
 
 }

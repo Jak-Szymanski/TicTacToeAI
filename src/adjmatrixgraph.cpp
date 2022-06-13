@@ -67,10 +67,11 @@ std::shared_ptr<Edge> AdjacencyMatrixGraph::InsertEdge(int x, std::shared_ptr<Ve
     int i = start->GetIndex();
     int j = end->GetIndex();
     AdjacencyMatrix[i][j] = E;
+    // AdjacencyMatrix[j][i] = E;
     return E;
 }
 
-Dequeue<std::shared_ptr<Edge>> AdjacencyMatrixGraph::IncidentEdges(std::shared_ptr<Vertex> V) const {
+Dequeue<std::shared_ptr<Edge>> AdjacencyMatrixGraph::StartingEdges(std::shared_ptr<Vertex> V) const {
 
     int j = V->GetIndex();
     Dequeue<std::shared_ptr<Edge>> tmp_incident;
@@ -80,6 +81,18 @@ Dequeue<std::shared_ptr<Edge>> AdjacencyMatrixGraph::IncidentEdges(std::shared_p
     }
     return tmp_incident;
 }
+
+ Dequeue<std::shared_ptr<Edge>> AdjacencyMatrixGraph::IncidentEdges(std::shared_ptr<Vertex> V) const {
+
+    int j = V->GetIndex();
+    Dequeue<std::shared_ptr<Edge>> tmp_incident;
+    int size = NumberVertices();
+    for(int i=0; i<size; i++){
+        if(AdjacencyMatrix[j][i] != NULL) tmp_incident.InsertEnd(AdjacencyMatrix[j][i]);
+        if(AdjacencyMatrix[i][j] != NULL) tmp_incident.InsertEnd(AdjacencyMatrix[i][j]);
+    }
+    return tmp_incident; 
+ }
 
 
 Dequeue<std::shared_ptr<Vertex>> AdjacencyMatrixGraph::AdjacentVertices(std::shared_ptr<Vertex> V) const {
@@ -105,12 +118,17 @@ void AdjacencyMatrixGraph::RemoveEdge(std::shared_ptr<Edge> E){
 
     Node<std::shared_ptr<Edge>>* ptr = E->GetPos();
 
-    if(ptr->GetNext() != NULL){
-        ptr->GetNext()->SetPrev(ptr->GetPrev());   
+    if(ptr == Edges()->GetHead()){
+        Edges()->RemoveFirst();
+        return;
+    } 
+    if(ptr == Edges()->GetTail()){
+        Edges()->RemoveLast();
+        return;
     }
-    if(ptr->GetPrev() != NULL){
-        ptr->GetPrev()->SetNext(ptr->GetNext());
-    }
+
+    ptr->GetPrev()->SetNext(ptr->GetNext());
+    ptr->GetNext()->SetPrev(ptr->GetPrev());
     delete ptr;
 }
 
@@ -123,26 +141,35 @@ void AdjacencyMatrixGraph::RemoveVertex(std::shared_ptr<Vertex> V){
         ptr_e = ptr_e->GetNext();
     }
 
-    AdjacencyMatrix.erase(AdjacencyMatrix.begin() + V->GetIndex());
+    int index = V->GetIndex();
+    AdjacencyMatrix.erase(AdjacencyMatrix.begin() + index);
+
+    for(int i=0; i<AdjacencyMatrix.size(); i++){
+        if(AdjacencyMatrix[i].size() > index){
+            AdjacencyMatrix[i].erase(AdjacencyMatrix[i].begin() + index);
+        }
+    }
+
 
     Node<std::shared_ptr<Vertex>>* ptr_v = V->GetPos();
 
-    if(ptr_v->GetNext() != NULL){
+    if(ptr_v->GetNext() == NULL){
+        Vertices()->SetTail(ptr_v->GetPrev());
+    } else{
         ptr_v->GetNext()->SetPrev(ptr_v->GetPrev());   
     }
-    if(ptr_v->GetPrev() != NULL){
+    if(ptr_v->GetPrev() == NULL){
+        Vertices()->SetHead(ptr_v->GetNext());
+    } else {
         ptr_v->GetPrev()->SetNext(ptr_v->GetNext());
     }
 
     Node<std::shared_ptr<Vertex>>* next = ptr_v->GetNext();
 
-/*     while(next != NULL){
+    while(next != NULL){
         next->GetElem()->SetIndex(next->GetElem()->GetIndex() - 1);
         next = next->GetNext();
-    } */
-
-
-
+    }
     delete ptr_v;
 }
 

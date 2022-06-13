@@ -6,7 +6,7 @@ class AdjacencyListVertex: public Vertex{
 
     private:
 
-        Dequeue<std::shared_ptr<Edge>>* AdjListPos;
+        Dequeue<std::shared_ptr<Edge>>* AdjList;
 
     public:
 
@@ -14,9 +14,9 @@ class AdjacencyListVertex: public Vertex{
 
         AdjacencyListVertex(Vertex V);
 
-        void SetAdjListPos(Dequeue<std::shared_ptr<Edge>>* new_adjlistpos) {AdjListPos = new_adjlistpos;};
+        void SetAdjList(Dequeue<std::shared_ptr<Edge>>* new_adjlist) {AdjList = new_adjlist;};
 
-        Dequeue<std::shared_ptr<Edge>>* GetAdjListPos() {return AdjListPos;};
+        Dequeue<std::shared_ptr<Edge>>* GetAdjList() {return AdjList;};
 
         //void SetAdjListPos(Dequeue<std::shared_ptr<Edge>>* new_adjlistpos){AdjListPos = new_adjlistpos;};
 };

@@ -36,9 +36,9 @@ class Vertex{
 
         virtual void SetIndex(int new_index){};
 
-        virtual Dequeue<std::shared_ptr<Edge>>* GetAdjListPos() {return NULL;};
+        virtual Dequeue<std::shared_ptr<Edge>>* GetAdjList() {return NULL;};
 
-        virtual void SetAdjListPos(Dequeue<std::shared_ptr<Edge>>* new_adjlistpos){};
+        virtual void SetAdjList(Dequeue<std::shared_ptr<Edge>>* new_adjlistpos){};
         
         friend std::ostream &operator << (std::ostream &out, Vertex const &vertex);        
 

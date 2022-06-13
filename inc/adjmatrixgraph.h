@@ -19,6 +19,8 @@ class AdjacencyMatrixGraph: public Graph{
 
         std::shared_ptr<Edge> InsertEdge(int x, std::shared_ptr<Vertex> start, std::shared_ptr<Vertex> end);
 
+        Dequeue<std::shared_ptr<Edge>> StartingEdges(std::shared_ptr<Vertex> V) const;
+
         Dequeue<std::shared_ptr<Edge>> IncidentEdges(std::shared_ptr<Vertex> V) const;
 
         Dequeue<std::shared_ptr<Vertex>> AdjacentVertices(std::shared_ptr<Vertex> V) const;
