@@ -2,7 +2,8 @@
 
 #include "vertex.h"
 
-class AdjacencyMatrixVertex: public Vertex{
+template<typename Type>
+class AdjacencyMatrixVertex: public Vertex<Type>{
 
     private:
 
@@ -12,10 +13,26 @@ class AdjacencyMatrixVertex: public Vertex{
 
         AdjacencyMatrixVertex();
 
-        AdjacencyMatrixVertex(Vertex V);
+        AdjacencyMatrixVertex(Vertex<Type> V);
 
         int GetIndex() const {return Index;};
 
         void SetIndex (int new_index) {Index = new_index;};
 
 };
+
+template <typename Type>
+AdjacencyMatrixVertex<Type>::AdjacencyMatrixVertex(){
+    
+    SetObject(Type());
+    SetPos(NULL);
+    SetIndex(0);
+};
+
+template <typename Type>
+AdjacencyMatrixVertex<Type>::AdjacencyMatrixVertex(Vertex<Type> V){
+
+    SetObject(V.GetObject());
+    SetPos(V.GetPos());
+    SetIndex(0);
+}

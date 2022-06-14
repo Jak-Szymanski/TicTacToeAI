@@ -1,5 +1,6 @@
 #include "../inc/adjlistgraph.h"
 #include "../inc/adjmatrixgraph.h"
+//#include "../inc/gamestategraph.h"
 
 #include <windows.h>
 #include <chrono>
@@ -23,13 +24,13 @@ int main(){
         std::cout << std::endl;
     } */
 
-    auto V1 = std::make_shared<Vertex>(); 
-                             auto V2 = std::make_shared<Vertex>();  
-    auto Vdelete = std::make_shared<Vertex>();  
+    auto V1 = std::make_shared<Vertex<GameState>>(); 
+                             auto V2 = std::make_shared<Vertex<GameState>>();  
+    auto Vdelete = std::make_shared<Vertex<GameState>>();  
 
-    // Graph graph;
-    AdjacencyListGraph graph;
-    // AdjacencyMatrixGraph graph;
+    // Graph<GameState> graph;
+    AdjacencyListGraph<GameState> graph;
+    // AdjacencyMatrixGraph<GameState> graph;
 
 
 
@@ -67,10 +68,10 @@ int main(){
         else{
             std::cout << "O";
             std::cout << std::endl << "Ruch komputera: " << std::endl;
-            // V1 = graph.InsertVertex(tablica);
+            V1 = graph.InsertVertex(tablica);
 
 
-            std::shared_ptr<Edge> E;
+/*             std::shared_ptr<Edge<GameState>> E;
             V1 = graph.InsertVertex(tablica);
             tablica.InsertChar(2,2);
             Vdelete = graph.InsertVertex(tablica);
@@ -84,13 +85,13 @@ int main(){
             V1= graph.InsertVertex(tablica);
             tablica.InsertChar(0,2);
             V2 = graph.InsertVertex(tablica);
-            E = graph.InsertEdge(1, V1, V2);
+            E = graph.InsertEdge(1, V1, V2); */
 
             
             //graph.RemoveVertex(Vdelete);
-            std::cout << graph;
+            // std::cout << graph;
 
-            return 0;
+            // return 0;
 
             //std::cout << std::endl << std::endl << std::endl << *graph.Edges();
             

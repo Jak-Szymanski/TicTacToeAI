@@ -1,13 +1,14 @@
 #include "../inc/dequeueptr.h"
 
-std::ostream &operator << (std::ostream &out, Dequeue<std::shared_ptr<Vertex>> const &dequeue){
+template <typename Type>
+std::ostream &operator << (std::ostream &out, Dequeue<std::shared_ptr<Vertex<Type>>> const &dequeue){
 
    if(dequeue.IsEmpty()){
     out << "Kolejka jest pusta" << std::endl;
     return out;
   }
 
-  Node<std::shared_ptr<Vertex>> *ptr = dequeue.GetHead();
+  Node<std::shared_ptr<Vertex<Type>>> *ptr = dequeue.GetHead();
   while(ptr->GetNext() != NULL){
     out << *ptr->GetElem() << std::endl;
     ptr = ptr->GetNext();
@@ -16,14 +17,16 @@ std::ostream &operator << (std::ostream &out, Dequeue<std::shared_ptr<Vertex>> c
   return out;
 }
 
-std::ostream &operator << (std::ostream &out, Dequeue<std::shared_ptr<Edge>> const &dequeue){
+
+template <typename Type>
+std::ostream &operator << (std::ostream &out, Dequeue<std::shared_ptr<Edge<Type>>> const &dequeue){
 
    if(dequeue.IsEmpty()){
     out << "Kolejka jest pusta" << std::endl;
     return out;
   }
 
-  Node<std::shared_ptr<Edge>> *ptr = dequeue.GetHead();
+  Node<std::shared_ptr<Edge<Type>>> *ptr = dequeue.GetHead();
   while(ptr->GetNext() != NULL){
     out << *ptr->GetElem() << std::endl;
     ptr = ptr->GetNext();
