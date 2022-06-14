@@ -7,7 +7,7 @@ class AdjacencyListVertex: public Vertex<Type>{
 
     private:
 
-        Dequeue<std::shared_ptr<Edge<Type>>>* AdjList;
+        Dequeue<Edge<Type>*>* AdjList;
 
     public:
 
@@ -15,11 +15,11 @@ class AdjacencyListVertex: public Vertex<Type>{
 
         AdjacencyListVertex(Vertex<Type> V);
 
-        void SetAdjList(Dequeue<std::shared_ptr<Edge<Type>>>* new_adjlist) {AdjList = new_adjlist;};
+        void SetAdjList(Dequeue<Edge<Type>*>* new_adjlist) {AdjList = new_adjlist;};
 
-        Dequeue<std::shared_ptr<Edge<Type>>>* GetAdjList() {return AdjList;};
+        Dequeue<Edge<Type>*>* GetAdjList() {return AdjList;};
 
-        //void SetAdjListPos(Dequeue<std::shared_ptr<Edge>>* new_adjlistpos){AdjListPos = new_adjlistpos;};
+        //void SetAdjListPos(Dequeue<Edge>>* new_adjlistpos){AdjListPos = new_adjlistpos;};
 };
 
 template<typename Type>

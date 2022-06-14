@@ -8,7 +8,7 @@ class AdjacencyMatrixGraph: public Graph<Type>{
 
     private:
 
-        std::vector<std::vector<std::shared_ptr<Edge<Type>>>> AdjacencyMatrix;
+        std::vector<std::vector<Edge<Type>*>> AdjacencyMatrix;
 
     public:
 
@@ -16,32 +16,32 @@ class AdjacencyMatrixGraph: public Graph<Type>{
 
         friend std::ostream &operator << (std::ostream &out, AdjacencyMatrixGraph<Type> const &graph);
 
-        std::shared_ptr<Vertex<Type>> InsertVertex(Type x);
+        Vertex<Type>* InsertVertex(Type x);
 
-        std::shared_ptr<Edge<Type>> InsertEdge(int x, std::shared_ptr<Vertex<Type>> start, std::shared_ptr<Vertex<Type>> end);
+        Edge<Type>* InsertEdge(int x, Vertex<Type>* start, Vertex<Type>* end);
 
-        Dequeue<std::shared_ptr<Edge<Type>>> StartingEdges(std::shared_ptr<Vertex<Type>> V) const;
+        Dequeue<Edge<Type>*> StartingEdges(Vertex<Type>* V) const;
 
-        Dequeue<std::shared_ptr<Edge<Type>>> IncidentEdges(std::shared_ptr<Vertex<Type>> V) const;
+        Dequeue<Edge<Type>*> IncidentEdges(Vertex<Type>* V) const;
 
-        Dequeue<std::shared_ptr<Vertex<Type>>> AdjacentVertices(std::shared_ptr<Vertex<Type>> V) const;
+        Dequeue<Vertex<Type>*> AdjacentVertices(Vertex<Type>* V) const;
 
-        bool AreAdjacent(std::shared_ptr<Vertex<Type>> V1, std::shared_ptr<Vertex<Type>> V2) const;
+        bool AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2) const;
 
-        void RemoveEdge(std::shared_ptr<Edge<Type>> E);
+        void RemoveEdge(Edge<Type>* E);
 
-        void RemoveVertex(std::shared_ptr<Vertex<Type>> V);
+        void RemoveVertex(Vertex<Type>* V);
 
 };
 
 template<typename Type>
-std::shared_ptr<Vertex<Type>> AdjacencyMatrixGraph<Type>::InsertVertex(Type x){
+Vertex<Type>* AdjacencyMatrixGraph<Type>::InsertVertex(Type x){
 
-    auto V = std::make_shared<AdjacencyMatrixVertex<Type>>(x);
+    auto V = new AdjacencyMatrixVertex<Type>(x);
 
     int new_size = NumberVertices() + 1;
     V->SetIndex(new_size-1);
-    AdjacencyMatrix.resize(new_size, std::vector<std::shared_ptr<Edge<Type>>>(new_size, NULL));
+    AdjacencyMatrix.resize(new_size, std::vector<Edge<Type>*>(new_size, NULL));
     for (auto &row: AdjacencyMatrix) row.resize(new_size, NULL);
     Vertices()->InsertFront(V);
     Vertices()->GetHead()->GetElem()->SetPos(Vertices()->GetHead());
@@ -51,9 +51,9 @@ std::shared_ptr<Vertex<Type>> AdjacencyMatrixGraph<Type>::InsertVertex(Type x){
 
 
 template<typename Type>
-std::shared_ptr<Edge<Type>> AdjacencyMatrixGraph<Type>::InsertEdge(int x, std::shared_ptr<Vertex<Type>> start, std::shared_ptr<Vertex<Type>> end){
+Edge<Type>* AdjacencyMatrixGraph<Type>::InsertEdge(int x, Vertex<Type>* start, Vertex<Type>* end){
     
-    auto E = std::make_shared<Edge<Type>>(x,start,end);
+    auto E = new Edge<Type>(x,start,end);
 
     Edges()->InsertFront(E);
     Edges()->GetHead()->GetElem()->SetPos(Edges()->GetHead());
@@ -66,10 +66,10 @@ std::shared_ptr<Edge<Type>> AdjacencyMatrixGraph<Type>::InsertEdge(int x, std::s
 
 
 template<typename Type>
-Dequeue<std::shared_ptr<Edge<Type>>> AdjacencyMatrixGraph<Type>::StartingEdges(std::shared_ptr<Vertex<Type>> V) const {
+Dequeue<Edge<Type>*> AdjacencyMatrixGraph<Type>::StartingEdges(Vertex<Type>* V) const {
 
     int j = V->GetIndex();
-    Dequeue<std::shared_ptr<Edge<Type>>> tmp_incident;
+    Dequeue<Edge<Type>*> tmp_incident;
     int size = NumberVertices();
     for(int i=0; i<size; i++){
         if(AdjacencyMatrix[j][i] != NULL) tmp_incident.InsertEnd(AdjacencyMatrix[j][i]);
@@ -79,10 +79,10 @@ Dequeue<std::shared_ptr<Edge<Type>>> AdjacencyMatrixGraph<Type>::StartingEdges(s
 
 
 template<typename Type>
- Dequeue<std::shared_ptr<Edge<Type>>> AdjacencyMatrixGraph<Type>::IncidentEdges(std::shared_ptr<Vertex<Type>> V) const {
+ Dequeue<Edge<Type>*> AdjacencyMatrixGraph<Type>::IncidentEdges(Vertex<Type>* V) const {
 
     int j = V->GetIndex();
-    Dequeue<std::shared_ptr<Edge<Type>>> tmp_incident;
+    Dequeue<Edge<Type>*> tmp_incident;
     int size = NumberVertices();
     for(int i=0; i<size; i++){
         if(AdjacencyMatrix[j][i] != NULL) tmp_incident.InsertEnd(AdjacencyMatrix[j][i]);
@@ -93,10 +93,10 @@ template<typename Type>
 
 
 template<typename Type>
-Dequeue<std::shared_ptr<Vertex<Type>>> AdjacencyMatrixGraph<Type>::AdjacentVertices(std::shared_ptr<Vertex<Type>> V) const {
+Dequeue<Vertex<Type>*> AdjacencyMatrixGraph<Type>::AdjacentVertices(Vertex<Type>* V) const {
 
     int j = V->GetIndex();
-    Dequeue<std::shared_ptr<Vertex<Type>>> tmp_adjacent;
+    Dequeue<Vertex<Type>*> tmp_adjacent;
     int size = NumberVertices();
     for(int i=0; i<size; i++){
         if(AdjacencyMatrix[j][i] != NULL) tmp_adjacent.InsertEnd(AdjacencyMatrix[j][i]->GetEnd());
@@ -107,18 +107,18 @@ Dequeue<std::shared_ptr<Vertex<Type>>> AdjacencyMatrixGraph<Type>::AdjacentVerti
 
 
 template<typename Type>
-bool AdjacencyMatrixGraph<Type>::AreAdjacent(std::shared_ptr<Vertex<Type>> V1, std::shared_ptr<Vertex<Type>> V2) const{
+bool AdjacencyMatrixGraph<Type>::AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2) const{
 
     return AdjacencyMatrix[V1->GetIndex()][V2->GetIndex()] != NULL;
 }
 
 
 template<typename Type>
-void AdjacencyMatrixGraph<Type>::RemoveEdge(std::shared_ptr<Edge<Type>> E){
+void AdjacencyMatrixGraph<Type>::RemoveEdge(Edge<Type>* E){
 
     AdjacencyMatrix[E->GetStart()->GetIndex()][E->GetEnd()->GetIndex()] = NULL;
 
-    Node<std::shared_ptr<Edge<Type>>>* ptr = E->GetPos();
+    Node<Edge<Type>*>* ptr = E->GetPos();
 
     if(ptr == Edges()->GetHead()){
         Edges()->RemoveFirst();
@@ -136,9 +136,9 @@ void AdjacencyMatrixGraph<Type>::RemoveEdge(std::shared_ptr<Edge<Type>> E){
 
 
 template<typename Type>
-void AdjacencyMatrixGraph<Type>::RemoveVertex(std::shared_ptr<Vertex<Type>> V){
+void AdjacencyMatrixGraph<Type>::RemoveVertex(Vertex<Type>* V){
 
-   Node<std::shared_ptr<Edge<Type>>>* ptr_e = IncidentEdges(V).GetHead();
+   Node<Edge<Type>*>* ptr_e = IncidentEdges(V).GetHead();
 
     while(ptr_e != NULL){
         RemoveEdge(ptr_e->GetElem());
@@ -155,7 +155,7 @@ void AdjacencyMatrixGraph<Type>::RemoveVertex(std::shared_ptr<Vertex<Type>> V){
     }
 
 
-    Node<std::shared_ptr<Vertex<Type>>>* ptr_v = V->GetPos();
+    Node<Vertex<Type>*>* ptr_v = V->GetPos();
 
     if(ptr_v->GetNext() == NULL){
         Vertices()->SetTail(ptr_v->GetPrev());
@@ -168,7 +168,7 @@ void AdjacencyMatrixGraph<Type>::RemoveVertex(std::shared_ptr<Vertex<Type>> V){
         ptr_v->GetPrev()->SetNext(ptr_v->GetNext());
     }
 
-    Node<std::shared_ptr<Vertex<Type>>>* next = ptr_v->GetNext();
+    Node<Vertex<Type>*>* next = ptr_v->GetNext();
 
     while(next != NULL){
         next->GetElem()->SetIndex(next->GetElem()->GetIndex() - 1);

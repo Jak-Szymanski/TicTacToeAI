@@ -12,7 +12,7 @@ class Vertex{
 
         Type Object;
 
-        Node<std::shared_ptr<Vertex>>* Pos;
+        Node<Vertex*>* Pos;
 
     public:
 
@@ -20,9 +20,9 @@ class Vertex{
 
         Vertex(Type x);
 
-        Node<std::shared_ptr<Vertex>>* GetPos() const {return Pos;};
+        Node<Vertex*>* GetPos() const {return Pos;};
 
-        void SetPos(Node<std::shared_ptr<Vertex>>* new_pos) {Pos = new_pos;};
+        void SetPos(Node<Vertex*>* new_pos) {Pos = new_pos;};
 
         Type GetObject() const {return Object;};
 
@@ -32,15 +32,15 @@ class Vertex{
 
         void SetCost(int new_cost) {Object.SetCost(new_cost);};
 
-        //virtual Dequeue<std::shared_ptr<Edge>>* GetAdjListPos() const {return NULL;};
+        //virtual Dequeue<Edge>>* GetAdjListPos() const {return NULL;};
 
         virtual int GetIndex() const {return 2;};
 
         virtual void SetIndex(int new_index){};
 
-        virtual Dequeue<std::shared_ptr<Edge<Type>>>* GetAdjList() {return NULL;};
+        virtual Dequeue<Edge<Type>*>* GetAdjList() {return NULL;};
 
-        virtual void SetAdjList(Dequeue<std::shared_ptr<Edge<Type>>>* new_adjlistpos){};
+        virtual void SetAdjList(Dequeue<Edge<Type>*>* new_adjlistpos){};
         
         friend std::ostream &operator << (std::ostream &out, Vertex const &vertex);        
 

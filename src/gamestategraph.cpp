@@ -1,12 +1,12 @@
 #include "../inc/gamestategraph.h"
 
 template<>
-void Graph<GameState>::CreateFutureMovesTree(std::shared_ptr<Vertex<GameState>> V1, int i){
+void Graph<GameState>::CreateFutureMovesTree(Vertex<GameState>* V1, int i){
 
     if(i==0) return;
 
     Dequeue<GameState> possible_moves;
-    auto V2 = std::make_shared<Vertex<GameState>>();   
+    auto V2 = new Vertex<GameState>();   
     GameState tmp_gs;
 
     possible_moves = V1->GetObject().GeneratePossibleMoves();
@@ -24,9 +24,9 @@ void Graph<GameState>::CreateFutureMovesTree(std::shared_ptr<Vertex<GameState>> 
 
 
 template<>
-int Graph<GameState>::Min(std::shared_ptr<Vertex<GameState>> V, int *alpha, int* beta){
+int Graph<GameState>::Min(Vertex<GameState>* V, int *alpha, int* beta){
 
-    Dequeue<std::shared_ptr<Vertex<GameState>>> adjacent = AdjacentVertices(V);
+    Dequeue<Vertex<GameState>*> adjacent = AdjacentVertices(V);
     int min = 100;
     int cost;
 
@@ -48,9 +48,9 @@ int Graph<GameState>::Min(std::shared_ptr<Vertex<GameState>> V, int *alpha, int*
 
 
 template<>
-int Graph<GameState>::Max(std::shared_ptr<Vertex<GameState>> V, int *alpha, int *beta){
+int Graph<GameState>::Max(Vertex<GameState>* V, int *alpha, int *beta){
 
-    Dequeue<std::shared_ptr<Vertex<GameState>>> adjacent = AdjacentVertices(V);
+    Dequeue<Vertex<GameState>*> adjacent = AdjacentVertices(V);
     int max = -100;
     int cost;
 
@@ -70,9 +70,9 @@ int Graph<GameState>::Max(std::shared_ptr<Vertex<GameState>> V, int *alpha, int 
 }
 
 template<>
-int Graph<GameState>::Minimax(std::shared_ptr<Vertex<GameState>> V, int* alpha, int* beta){
+int Graph<GameState>::Minimax(Vertex<GameState>* V, int* alpha, int* beta){
 
-    Dequeue<std::shared_ptr<Vertex<GameState>>> adjacent = AdjacentVertices(V);
+    Dequeue<Vertex<GameState>*> adjacent = AdjacentVertices(V);
 
     if (adjacent.IsEmpty()){
 /*         if(V->GetObject().NextMove == 1){
@@ -102,9 +102,9 @@ int Graph<GameState>::Minimax(std::shared_ptr<Vertex<GameState>> V, int* alpha, 
 }
 
 template<>
-GameState Graph<GameState>::GetMaxMove(std::shared_ptr<Vertex<GameState>> V){
+GameState Graph<GameState>::GetMaxMove(Vertex<GameState>* V){
 
-    Dequeue<std::shared_ptr<Vertex<GameState>>> adjacent = AdjacentVertices(V);
+    Dequeue<Vertex<GameState>*> adjacent = AdjacentVertices(V);
     GameState GS;
 
     while(!adjacent.IsEmpty()){

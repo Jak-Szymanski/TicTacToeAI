@@ -7,9 +7,9 @@ class AdjacencyListEdge: public Edge<Type>{
 
     private:
 
-        Node<std::shared_ptr<Edge<Type>>>* AdjListStart;
+        Node<Edge<Type>*>* AdjListStart;
 
-        Node<std::shared_ptr<Edge<Type>>>* AdjListEnd;
+        Node<Edge<Type>*>* AdjListEnd;
 
     public:
 
@@ -17,15 +17,15 @@ class AdjacencyListEdge: public Edge<Type>{
 
         AdjacencyListEdge(Edge<Type> E);
 
-        AdjacencyListEdge(int x, std::shared_ptr<Vertex<Type>> new_start, std::shared_ptr<Vertex<Type>> new_end);
+        AdjacencyListEdge(int x, Vertex<Type>* new_start, Vertex<Type>* new_end);
 
-        void SetAdjListStart(Node<std::shared_ptr<Edge<Type>>>* new_adjliststart) {AdjListStart = new_adjliststart;};
+        void SetAdjListStart(Node<Edge<Type>*>* new_adjliststart) {AdjListStart = new_adjliststart;};
 
-        void SetAdjListEnd(Node<std::shared_ptr<Edge<Type>>>* new_adjlistend) {AdjListEnd = new_adjlistend;};
+        void SetAdjListEnd(Node<Edge<Type>*>* new_adjlistend) {AdjListEnd = new_adjlistend;};
 
-        Node<std::shared_ptr<Edge<Type>>>* GetAdjListStart() {return AdjListStart;};
+        Node<Edge<Type>*>* GetAdjListStart() {return AdjListStart;};
 
-        Node<std::shared_ptr<Edge<Type>>>* GetAdjListEnd() {return AdjListEnd;};
+        Node<Edge<Type>*>* GetAdjListEnd() {return AdjListEnd;};
 
 
     
@@ -43,7 +43,7 @@ AdjacencyListEdge<Type>::AdjacencyListEdge(){
 }
 
 template<typename Type>
-AdjacencyListEdge<Type>::AdjacencyListEdge(int x, std::shared_ptr<Vertex<Type>> new_start, std::shared_ptr<Vertex<Type>> new_end){
+AdjacencyListEdge<Type>::AdjacencyListEdge(int x, Vertex<Type>* new_start, Vertex<Type>* new_end){
 
     SetObject(x);
     SetStart(new_start);

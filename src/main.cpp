@@ -24,13 +24,13 @@ int main(){
         std::cout << std::endl;
     } */
 
-    auto V1 = std::make_shared<Vertex<GameState>>(); 
-                             auto V2 = std::make_shared<Vertex<GameState>>();  
-    auto Vdelete = std::make_shared<Vertex<GameState>>();  
+    auto V1 = new Vertex<GameState>(); 
+                             auto V2 = new Vertex<GameState>();  
+    auto Vdelete = new Vertex<GameState>();  
 
     // Graph<GameState> graph;
-    AdjacencyListGraph<GameState> graph;
-    // AdjacencyMatrixGraph<GameState> graph;
+    // AdjacencyListGraph<GameState> graph;
+    AdjacencyMatrixGraph<GameState> graph;
 
 
 

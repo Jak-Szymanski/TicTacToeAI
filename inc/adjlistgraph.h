@@ -8,7 +8,7 @@ class AdjacencyListGraph: public Graph<Type>{
 
     private:
 
-        Dequeue<Dequeue<std::shared_ptr<Edge<Type>>>> AdjacencyList;
+        Dequeue<Dequeue<Edge<Type>*>> AdjacencyList;
 
     public:
 
@@ -20,28 +20,28 @@ class AdjacencyListGraph: public Graph<Type>{
 
         //Dequeue<Dequeue<AdjacencyListEdge*>> GetAdjacencyList() const {return AdjacencyList;};
 
-        std::shared_ptr<Vertex<Type>> InsertVertex(Type x);
+        Vertex<Type>* InsertVertex(Type x);
 
-        std::shared_ptr<Edge<Type>> InsertEdge(int x, std::shared_ptr<Vertex<Type>> start, std::shared_ptr<Vertex<Type>> end);
+        Edge<Type>* InsertEdge(int x, Vertex<Type>* start, Vertex<Type>* end);
 
-        Dequeue<std::shared_ptr<Edge<Type>>> StartingEdges(std::shared_ptr<Vertex<Type>> V) const;
+        Dequeue<Edge<Type>*> StartingEdges(Vertex<Type>* V) const;
 
-        Dequeue<std::shared_ptr<Edge<Type>>> IncidentEdges(std::shared_ptr<Vertex<Type>> V) const;
+        Dequeue<Edge<Type>*> IncidentEdges(Vertex<Type>* V) const;
 
-        Dequeue<std::shared_ptr<Vertex<Type>>> AdjacentVertices(std::shared_ptr<Vertex<Type>> V) const;
+        Dequeue<Vertex<Type>*> AdjacentVertices(Vertex<Type>* V) const;
 
-        bool AreAdjacent(std::shared_ptr<Vertex<Type>> V1, std::shared_ptr<Vertex<Type>> V2) const;
+        bool AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2) const;
 
-        void RemoveEdge(std::shared_ptr<Edge<Type>> E);
+        void RemoveEdge(Edge<Type>* E);
 
 };
 
 template<typename Type>
 AdjacencyListGraph<Type>::AdjacencyListGraph(){
     
-    *Vertices() = Dequeue<std::shared_ptr<Vertex<Type>>>();
-    *Edges() = Dequeue<std::shared_ptr<Edge<Type>>>();
-    AdjacencyList = Dequeue<Dequeue<std::shared_ptr<Edge<Type>>>>();
+    *Vertices() = Dequeue<Vertex<Type>*>();
+    *Edges() = Dequeue<Edge<Type>*>();
+    AdjacencyList = Dequeue<Dequeue<Edge<Type>*>>();
 }
 
 template<typename Type>
@@ -52,7 +52,7 @@ std::ostream &operator << (std::ostream &out, AdjacencyListGraph<Type> const &gr
         return out;
     }
 
-    Node<Dequeue<std::shared_ptr<Edge<Type>>>> *ptr = graph.AdjacencyList.GetHead();
+    Node<Dequeue<Edge<Type>*>> *ptr = graph.AdjacencyList.GetHead();
 
     while(ptr != NULL){
         out << "Sasiedztwo wierzcholka:" << std::endl;
@@ -67,18 +67,18 @@ std::ostream &operator << (std::ostream &out, AdjacencyListGraph<Type> const &gr
 /* AdjacencyListGraph::AdjacencyListGraph(const Graph G){
 
     Graph copyG(G);
-    Dequeue<std::shared_ptr<Vertex>> tmp_vertices = *copyG.Vertices();
+    Dequeue<Vertex>> tmp_vertices = *copyG.Vertices();
     Dequeue<Edge> tmp_incident;
-    Dequeue<std::shared_ptr<Edge>> tmp_adj;
+    Dequeue<Edge>> tmp_adj;
     Edge tmp_edge;
-    std::shared_ptr<Vertex> tmp_vertex;
+    Vertex> tmp_vertex;
 
     while(!tmp_vertices.IsEmpty()){
         tmp_vertex = tmp_vertices.RemoveFirst();
         tmp_incident = copyG.IncidentEdges(tmp_vertex);
         while(!tmp_incident.IsEmpty()){
             tmp_edge = tmp_incident.RemoveFirst();
-            std::shared_ptr<Edge> tmp_adjedge = std::dynamic_pointer_cast<Edge>(std::make_shared<AdjacencyListEdge>(tmp_edge));
+            Edge> tmp_adjedge = std::dynamic_pointer_cast<Edge>(std::make_shared<AdjacencyListEdge>(tmp_edge));
             tmp_adj.InsertEnd(tmp_adjedge);
         }
         Vertices()->InsertEnd(std::dynamic_pointer_cast<Vertex>(std::make_shared<AdjacencyListVertex>(*tmp_vertex)));        //uwaga zmieniłem
@@ -86,14 +86,14 @@ std::ostream &operator << (std::ostream &out, AdjacencyListGraph<Type> const &gr
     }
 
 
-    Dequeue<std::shared_ptr<Edge>> tmp_edges = *copyG.Edges();
-    std::shared_ptr<Edge> tmp_edgeptr;
+    Dequeue<Edge>> tmp_edges = *copyG.Edges();
+    Edge> tmp_edgeptr;
    // AdjacencyListEdge tmp_adjedge;
     while(!tmp_edges.IsEmpty()){
         tmp_edgeptr = tmp_edges.RemoveFirst();
         tmp_adjedge = AdjacencyListEdge(*tmp_edgeptr);
         tmp_adj = *tmp_adjedge.GetStart().GetAdjListPos();
-        Node<std::shared_ptr<Edge>>* ptr = tmp_adj.GetHead();
+        Node<Edge>>* ptr = tmp_adj.GetHead();
         while(ptr != NULL){
             if(ptr->GetElem())
         }
@@ -105,10 +105,10 @@ std::ostream &operator << (std::ostream &out, AdjacencyListGraph<Type> const &gr
 } */
 
 template<typename Type>
-Dequeue<std::shared_ptr<Edge<Type>>> AdjacencyListGraph<Type>::StartingEdges(std::shared_ptr<Vertex<Type>> V) const{
+Dequeue<Edge<Type>*> AdjacencyListGraph<Type>::StartingEdges(Vertex<Type>* V) const{
     
-    Dequeue<std::shared_ptr<Edge<Type>>> starting;
-    Node<std::shared_ptr<Edge<Type>>>* ptr = V->GetAdjList()->GetHead();
+    Dequeue<Edge<Type>*> starting;
+    Node<Edge<Type>*>* ptr = V->GetAdjList()->GetHead();
 
     while(ptr != NULL){
         if(ptr->GetElem()->GetEnd() != V) starting.InsertEnd(ptr->GetElem());
@@ -119,17 +119,17 @@ Dequeue<std::shared_ptr<Edge<Type>>> AdjacencyListGraph<Type>::StartingEdges(std
 
 
 template<typename Type>
-Dequeue<std::shared_ptr<Edge<Type>>> AdjacencyListGraph<Type>::IncidentEdges(std::shared_ptr<Vertex<Type>> V) const{
+Dequeue<Edge<Type>*> AdjacencyListGraph<Type>::IncidentEdges(Vertex<Type>* V) const{
 
     return *V->GetAdjList();
 }
 
 
 template<typename Type>
-Dequeue<std::shared_ptr<Vertex<Type>>> AdjacencyListGraph<Type>::AdjacentVertices(std::shared_ptr<Vertex<Type>> V) const {
+Dequeue<Vertex<Type>*> AdjacencyListGraph<Type>::AdjacentVertices(Vertex<Type>* V) const {
     
-    Dequeue<std::shared_ptr<Vertex<Type>>> tmp_adjacent;
-    Node<std::shared_ptr<Edge<Type>>>* ptr = V->GetAdjList()->GetHead();
+    Dequeue<Vertex<Type>*> tmp_adjacent;
+    Node<Edge<Type>*>* ptr = V->GetAdjList()->GetHead();
 
     while(ptr != NULL){
         if(ptr->GetElem()->GetEnd() != V) tmp_adjacent.InsertEnd(ptr->GetElem()->GetEnd());
@@ -140,10 +140,10 @@ Dequeue<std::shared_ptr<Vertex<Type>>> AdjacencyListGraph<Type>::AdjacentVertice
 
 
 template<typename Type>
-std::shared_ptr<Vertex<Type>> AdjacencyListGraph<Type>::InsertVertex(Type x){
+Vertex<Type>* AdjacencyListGraph<Type>::InsertVertex(Type x){
 
-    auto V = std::make_shared<AdjacencyListVertex<Type>>(x);
-    Dequeue<std::shared_ptr<Edge<Type>>>* tmp_adjlist = new Dequeue<std::shared_ptr<Edge<Type>>>();
+    auto V = new AdjacencyListVertex<Type>(x);
+    Dequeue<Edge<Type>*>* tmp_adjlist = new Dequeue<Edge<Type>*>();
 
     
     AdjacencyList.InsertEnd(*tmp_adjlist);
@@ -157,9 +157,9 @@ std::shared_ptr<Vertex<Type>> AdjacencyListGraph<Type>::InsertVertex(Type x){
 
 
 template<typename Type>
-std::shared_ptr<Edge<Type>> AdjacencyListGraph<Type>::InsertEdge(int x, std::shared_ptr<Vertex<Type>> start, std::shared_ptr<Vertex<Type>> end){
+Edge<Type>* AdjacencyListGraph<Type>::InsertEdge(int x, Vertex<Type>* start, Vertex<Type>* end){
 
-    auto E = std::make_shared<AdjacencyListEdge<Type>>(x,start,end);
+    auto E = new AdjacencyListEdge<Type>(x,start,end);
 
         Edges()->InsertFront(E);
     Edges()->GetHead()->GetElem()->SetPos(Edges()->GetHead());
@@ -181,9 +181,9 @@ std::shared_ptr<Edge<Type>> AdjacencyListGraph<Type>::InsertEdge(int x, std::sha
 
 
 template<typename Type>
-bool AdjacencyListGraph<Type>::AreAdjacent(std::shared_ptr<Vertex<Type>> V1, std::shared_ptr<Vertex<Type>> V2) const{
+bool AdjacencyListGraph<Type>::AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2) const{
 
-    Node<std::shared_ptr<Edge<Type>>>* ptr = V1->GetAdjList()->GetHead();
+    Node<Edge<Type>*>* ptr = V1->GetAdjList()->GetHead();
 
     while(ptr != NULL){
         if (ptr->GetElem()->GetEnd() == V2) return true;
@@ -194,9 +194,9 @@ bool AdjacencyListGraph<Type>::AreAdjacent(std::shared_ptr<Vertex<Type>> V1, std
 
 
 template<typename Type>
-void AdjacencyListGraph<Type>::RemoveEdge(std::shared_ptr<Edge<Type>> E){
+void AdjacencyListGraph<Type>::RemoveEdge(Edge<Type>* E){
 
-    Node<std::shared_ptr<Edge<Type>>>* ptr = E->GetPos();
+    Node<Edge<Type>*>* ptr = E->GetPos();
 
     if(ptr == Edges()->GetHead()){
         Edges()->RemoveFirst();

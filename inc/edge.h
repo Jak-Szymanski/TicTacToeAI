@@ -9,37 +9,37 @@ class Edge{
 
         int Object;
 
-        std::shared_ptr<Vertex<Type>> Start;
+        Vertex<Type>* Start;
 
-        std::shared_ptr<Vertex<Type>> End;
+        Vertex<Type>* End;
 
-        Node<std::shared_ptr<Edge<Type>>>* Pos;
+        Node<Edge<Type>*>* Pos;
 
     public:
 
         Edge();
 
-        Edge(int x, std::shared_ptr<Vertex<Type>> new_start, std::shared_ptr<Vertex<Type>> new_end);
+        Edge(int x, Vertex<Type>* new_start, Vertex<Type>* new_end);
     
-        Node<std::shared_ptr<Edge<Type>>>* GetPos() const {return Pos;};
+        Node<Edge<Type>*>* GetPos() const {return Pos;};
 
-        void SetPos(Node<std::shared_ptr<Edge<Type>>>* new_pos) {Pos = new_pos;};
+        void SetPos(Node<Edge<Type>*>* new_pos) {Pos = new_pos;};
 
         int GetObject() const {return Object;};
 
         void SetObject(int new_object) {Object = new_object;};
 
-        std::shared_ptr<Vertex<Type>> GetStart() {return Start;};
+        Vertex<Type>* GetStart() {return Start;};
 
-        void SetStart(std::shared_ptr<Vertex<Type>> new_start) {Start = new_start;};
+        void SetStart(Vertex<Type>* new_start) {Start = new_start;};
 
-        std::shared_ptr<Vertex<Type>> GetEnd() {return End;};
+        Vertex<Type>* GetEnd() {return End;};
 
-        void SetEnd(std::shared_ptr<Vertex<Type>> new_end) {End = new_end;};
+        void SetEnd(Vertex<Type>* new_end) {End = new_end;};
 
-        virtual Node<std::shared_ptr<Edge<Type>>>* GetAdjListStart() {return NULL;};
+        virtual Node<Edge<Type>*>* GetAdjListStart() {return NULL;};
 
-        virtual Node<std::shared_ptr<Edge<Type>>>* GetAdjListEnd() {return NULL;};
+        virtual Node<Edge<Type>*>* GetAdjListEnd() {return NULL;};
 
         friend std::ostream &operator << (std::ostream &out, Edge<Type> const &edge);
 
@@ -69,7 +69,7 @@ Edge<Type>::Edge(){
 
 
 template<typename Type>
-Edge<Type>::Edge(int x, std::shared_ptr<Vertex<Type>> new_start, std::shared_ptr<Vertex<Type>> new_end){
+Edge<Type>::Edge(int x, Vertex<Type>* new_start, Vertex<Type>* new_end){
 
     Object = x;
     Start = new_start;

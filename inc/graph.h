@@ -11,9 +11,9 @@ class Graph{
 
     private:
 
-        Dequeue<std::shared_ptr<Vertex<Type>>> VQueue;
+        Dequeue<Vertex<Type>*> VQueue;
 
-        Dequeue<std::shared_ptr<Edge<Type>>> EQueue;
+        Dequeue<Edge<Type>*> EQueue;
 
     public:
 
@@ -21,25 +21,25 @@ class Graph{
 
         Graph(const Graph<Type> &G);
 
-        Dequeue<std::shared_ptr<Vertex<Type>>>* Vertices(){return &VQueue;};
+        Dequeue<Vertex<Type>*>* Vertices(){return &VQueue;};
 
-        Dequeue<std::shared_ptr<Edge<Type>>>* Edges(){return &EQueue;};
+        Dequeue<Edge<Type>*>* Edges(){return &EQueue;};
 
-        virtual std::shared_ptr<Vertex<Type>> InsertVertex(Type x);
+        virtual Vertex<Type>* InsertVertex(Type x);
 
-        virtual std::shared_ptr<Edge<Type>> InsertEdge(int x, std::shared_ptr<Vertex<Type>> start, std::shared_ptr<Vertex<Type>> end);
+        virtual Edge<Type>* InsertEdge(int x, Vertex<Type>* start, Vertex<Type>* end);
 
-        virtual Dequeue<std::shared_ptr<Edge<Type>>> StartingEdges(std::shared_ptr<Vertex<Type>> V) const;
+        virtual Dequeue<Edge<Type>*> StartingEdges(Vertex<Type>* V) const;
 
-        virtual Dequeue<std::shared_ptr<Edge<Type>>> IncidentEdges(std::shared_ptr<Vertex<Type>> V) const;
+        virtual Dequeue<Edge<Type>*> IncidentEdges(Vertex<Type>* V) const;
 
-        virtual Dequeue<std::shared_ptr<Vertex<Type>>> AdjacentVertices(std::shared_ptr<Vertex<Type>> V) const;
+        virtual Dequeue<Vertex<Type>*> AdjacentVertices(Vertex<Type>* V) const;
 
-        virtual bool AreAdjacent(std::shared_ptr<Vertex<Type>> V1, std::shared_ptr<Vertex<Type>> V2) const;
+        virtual bool AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2) const;
 
-        virtual void RemoveEdge(std::shared_ptr<Edge<Type>> E);
+        virtual void RemoveEdge(Edge<Type>* E);
 
-        virtual void RemoveVertex(std::shared_ptr<Vertex<Type>> V);
+        virtual void RemoveVertex(Vertex<Type>* V);
 
         int NumberVertices() const {return VQueue.Size();};
 
@@ -47,15 +47,15 @@ class Graph{
 
         void Delete();
 
-        void CreateFutureMovesTree(std::shared_ptr<Vertex<Type>> V1, int i);
+        void CreateFutureMovesTree(Vertex<Type>* V1, int i);
 
-        int Min(std::shared_ptr<Vertex<Type>> V, int *alpha, int *beta);
+        int Min(Vertex<Type>* V, int *alpha, int *beta);
 
-        int Max(std::shared_ptr<Vertex<Type>> V, int *alpha, int *beta);
+        int Max(Vertex<Type>* V, int *alpha, int *beta);
 
-        int Minimax(std::shared_ptr<Vertex<Type>> V, int* alpha, int* beta);
+        int Minimax(Vertex<Type>* V, int* alpha, int* beta);
 
-        Type GetMaxMove(std::shared_ptr<Vertex<Type>> V);
+        Type GetMaxMove(Vertex<Type>* V);
 
         friend std::ostream &operator << (std::ostream &out, Graph<Type> &graph);
 };
@@ -65,24 +65,24 @@ class Graph{
 template<typename Type>
 Graph<Type>::Graph(){
 
-    VQueue = Dequeue<std::shared_ptr<Vertex<Type>>>();
-    EQueue = Dequeue<std::shared_ptr<Edge<Type>>>();
+    VQueue = Dequeue<Vertex<Type>*>();
+    EQueue = Dequeue<Edge<Type>*>();
 }
 
 template<typename Type>
 Graph<Type>::Graph(const Graph<Type> &G){
 
-    Node<std::shared_ptr<Vertex<Type>>> *ptr_v = G.VQueue.GetHead();
+    Node<Vertex<Type>*> *ptr_v = G.VQueue.GetHead();
     while(ptr_v != NULL){
         Vertex<Type> tmp_v = *ptr_v->GetElem();
-        VQueue.InsertEnd(std::make_shared<Vertex<Type>>(tmp_v));
+        VQueue.InsertEnd(&tmp_v);
         ptr_v = ptr_v->GetNext();
     }
 
-    Node<std::shared_ptr<Edge<Type>>> *ptr_e = G.EQueue.GetHead();
+    Node<Edge<Type>*> *ptr_e = G.EQueue.GetHead();
     while(ptr_e != NULL){
         Edge<Type> tmp_e = *ptr_e->GetElem();
-        EQueue.InsertEnd(std::make_shared<Edge<Type>>(tmp_e));
+        EQueue.InsertEnd(&tmp_e);
         ptr_e = ptr_e->GetNext();
     }
 }
@@ -99,9 +99,9 @@ std::ostream &operator << (std::ostream &out, Graph<Type> &graph){
 
 
 template<typename Type>
-std::shared_ptr<Vertex<Type>> Graph<Type>::InsertVertex(Type x){
+Vertex<Type>* Graph<Type>::InsertVertex(Type x){
 
-    auto V = std::make_shared<Vertex<Type>>(x);
+    auto V = new Vertex<Type>(x);
 
     VQueue.InsertFront(V);
     VQueue.GetHead()->GetElem()->SetPos(VQueue.GetHead());
@@ -110,9 +110,9 @@ std::shared_ptr<Vertex<Type>> Graph<Type>::InsertVertex(Type x){
 
 
 template<typename Type>
-std::shared_ptr<Edge<Type>> Graph<Type>::InsertEdge(int x, std::shared_ptr<Vertex<Type>> start, std::shared_ptr<Vertex<Type>> end){
+Edge<Type>* Graph<Type>::InsertEdge(int x, Vertex<Type>* start, Vertex<Type>* end){
 
-    auto E = std::make_shared<Edge<Type>>(x,start,end);
+    auto E = new Edge<Type>(x,start,end);
 
     EQueue.InsertFront(E);
     EQueue.GetHead()->GetElem()->SetPos(EQueue.GetHead());
@@ -121,11 +121,11 @@ std::shared_ptr<Edge<Type>> Graph<Type>::InsertEdge(int x, std::shared_ptr<Verte
 
 
 template<typename Type>
-Dequeue<std::shared_ptr<Edge<Type>>> Graph<Type>::StartingEdges(std::shared_ptr<Vertex<Type>> V) const{
+Dequeue<Edge<Type>*> Graph<Type>::StartingEdges(Vertex<Type>* V) const{
 
-    Dequeue<std::shared_ptr<Edge<Type>>> dequeue;
+    Dequeue<Edge<Type>*> dequeue;
     
-    Node<std::shared_ptr<Edge<Type>>> *ptr = EQueue.GetHead();
+    Node<Edge<Type>*> *ptr = EQueue.GetHead();
     while(ptr != NULL){
         if (*ptr->GetElem()->GetStart() == *V){
             dequeue.InsertFront(ptr->GetElem());
@@ -137,11 +137,11 @@ Dequeue<std::shared_ptr<Edge<Type>>> Graph<Type>::StartingEdges(std::shared_ptr<
 
 
 template<typename Type>
-Dequeue<std::shared_ptr<Edge<Type>>> Graph<Type>::IncidentEdges(std::shared_ptr<Vertex<Type>> V) const{
+Dequeue<Edge<Type>*> Graph<Type>::IncidentEdges(Vertex<Type>* V) const{
 
-    Dequeue<std::shared_ptr<Edge<Type>>> dequeue;
+    Dequeue<Edge<Type>*> dequeue;
     
-    Node<std::shared_ptr<Edge<Type>>> *ptr = EQueue.GetHead();
+    Node<Edge<Type>*> *ptr = EQueue.GetHead();
     while(ptr != NULL){
         if (*ptr->GetElem()->GetStart() == *V || *ptr->GetElem()->GetEnd() == *V){
             dequeue.InsertFront(ptr->GetElem());
@@ -153,10 +153,10 @@ Dequeue<std::shared_ptr<Edge<Type>>> Graph<Type>::IncidentEdges(std::shared_ptr<
 
 
 template<typename Type>
-Dequeue<std::shared_ptr<Vertex<Type>>> Graph<Type>::AdjacentVertices(std::shared_ptr<Vertex<Type>> V) const{
+Dequeue<Vertex<Type>*> Graph<Type>::AdjacentVertices(Vertex<Type>* V) const{
 
-    Dequeue<std::shared_ptr<Edge<Type>>> incident = StartingEdges(V);
-    Dequeue<std::shared_ptr<Vertex<Type>>> adjacent;
+    Dequeue<Edge<Type>*> incident = StartingEdges(V);
+    Dequeue<Vertex<Type>*> adjacent;
 
     while(!incident.IsEmpty()){
         adjacent.InsertFront(incident.RemoveFirst()->GetEnd());
@@ -165,9 +165,9 @@ Dequeue<std::shared_ptr<Vertex<Type>>> Graph<Type>::AdjacentVertices(std::shared
 }
 
 template<typename Type>
-bool Graph<Type>::AreAdjacent(std::shared_ptr<Vertex<Type>> V1, std::shared_ptr<Vertex<Type>> V2) const {
+bool Graph<Type>::AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2) const {
 
-    Node<std::shared_ptr<Edge<Type>>>* ptr = EQueue.GetHead();
+    Node<Edge<Type>*>* ptr = EQueue.GetHead();
 
     while(ptr != NULL){
         if(ptr->GetElem()->GetStart() == V1 && ptr->GetElem()->GetEnd() == V2) return true;
@@ -177,9 +177,9 @@ bool Graph<Type>::AreAdjacent(std::shared_ptr<Vertex<Type>> V1, std::shared_ptr<
 }
 
 template<typename Type>
-void Graph<Type>::RemoveEdge(std::shared_ptr<Edge<Type>> E){
+void Graph<Type>::RemoveEdge(Edge<Type>* E){
 
-    Node<std::shared_ptr<Edge<Type>>>* ptr = E->GetPos();
+    Node<Edge<Type>*>* ptr = E->GetPos();
 
     if(ptr == EQueue.GetHead()){
         EQueue.RemoveFirst();
@@ -196,16 +196,16 @@ void Graph<Type>::RemoveEdge(std::shared_ptr<Edge<Type>> E){
 }
 
 template<typename Type>
-void Graph<Type>::RemoveVertex(std::shared_ptr<Vertex<Type>> V){
+void Graph<Type>::RemoveVertex(Vertex<Type>* V){
 
-   Node<std::shared_ptr<Edge<Type>>>* ptr_e = IncidentEdges(V).GetHead();
+   Node<Edge<Type>*>* ptr_e = IncidentEdges(V).GetHead();
 
     while(ptr_e != NULL){
         RemoveEdge(ptr_e->GetElem());
         ptr_e = ptr_e->GetNext();
     }
 
-    Node<std::shared_ptr<Vertex<Type>>>* ptr_v = V->GetPos();
+    Node<Vertex<Type>*>* ptr_v = V->GetPos();
 
     if(ptr_v == VQueue.GetHead()){
         VQueue.RemoveFirst();
