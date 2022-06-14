@@ -2,17 +2,19 @@
 
 #include "dequeueptr.h"
 
-#define SEARCH_DEPTH 1
+#define SEARCH_DEPTH 3
 
 
-
+/*Graf zawierający elementy typu Type opisany poprzez listę krawędzi i listę wierzchołków*/
 template<typename Type>
 class Graph{
 
     private:
 
+        /*Lista wierzchołków*/
         Dequeue<Vertex<Type>*> VQueue;
 
+        /*Lista krawędzi*/
         Dequeue<Edge<Type>*> EQueue;
 
     public:
@@ -25,28 +27,42 @@ class Graph{
 
         Dequeue<Edge<Type>*>* Edges(){return &EQueue;};
 
+        /*Wstaw nowy wierzchołek zawierający element x, i zwróć wskaźnik na niego*/
         virtual Vertex<Type>* InsertVertex(Type x);
 
+        /*Wstaw nową krawędź zawierająca element x i mająca dane wierzchołki końcowe, i zwróć wskaźnik na nią*/
         virtual Edge<Type>* InsertEdge(int x, Vertex<Type>* start, Vertex<Type>* end);
 
-        virtual Dequeue<Edge<Type>*> StartingEdges(Vertex<Type>* V) const;
-
+        /*Zwróć krawędzie przylegające do danego wierzchołka*/
         virtual Dequeue<Edge<Type>*> IncidentEdges(Vertex<Type>* V) const;
 
+        /*Zwróć krawędzie zaczynające się z danego wierzchołka*/
+        virtual Dequeue<Edge<Type>*> StartingEdges(Vertex<Type>* V) const;
+
+        /*Zwróć wierzchołki sąsiadujące z danym wierzchołkiem*/
         virtual Dequeue<Vertex<Type>*> AdjacentVertices(Vertex<Type>* V) const;
 
+        /*Czy dane wierzchołki ze sobą sąsiadują*/
         virtual bool AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2) const;
 
+        /*Usuń daną krawędź*/
         virtual void RemoveEdge(Edge<Type>* E);
 
+        /*Usuń dany wierzchołek (i wszystkie krawędzie przylegające do niego)*/
         virtual void RemoveVertex(Vertex<Type>* V);
 
+        /*Zwróć liczbę wierzchołków*/
         int NumberVertices() const {return VQueue.Size();};
 
+        /*Zwróć liczbę krawędzi*/
         int NumberEdges() const {return EQueue.Size();};
 
-        void Delete();
+        /*Wyczyść cały graf*/
+        virtual void Delete();
 
+        friend std::ostream &operator << (std::ostream &out, Graph<Type> const &graph);
+
+            /* --- Poniższe metody są opisane tylko dla grafu zawierającego klasę GameState (w pliku src/gamestate.cpp) --- */
         void CreateFutureMovesTree(Vertex<Type>* V1, int i);
 
         int Min(Vertex<Type>* V, int *alpha, int *beta);
@@ -57,9 +73,14 @@ class Graph{
 
         Type GetMaxMove(Vertex<Type>* V);
 
-        friend std::ostream &operator << (std::ostream &out, Graph<Type> &graph);
+
+
+
+        
 };
 
+/* template<typename Type>
+std::ostream &operator << (std::ostream &out, Graph<Type> &graph); */
 
 
 template<typename Type>

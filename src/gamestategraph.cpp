@@ -1,5 +1,8 @@
 #include "../inc/gamestategraph.h"
 
+
+/*Stwórz graf zawierający potencjalne przyszłe ruchy obu członków, zaczynając od stanu opisanego wierzchołkiem V1
+  szukając o i ruchów do przodu*/
 template<>
 void Graph<GameState>::CreateFutureMovesTree(Vertex<GameState>* V1, int i){
 
@@ -22,7 +25,9 @@ void Graph<GameState>::CreateFutureMovesTree(Vertex<GameState>* V1, int i){
 
 }
 
-
+/*Wykonaj na wierzchołku V algorytm Min z algorytmu Minimax
+  Zwróć 1 jeżeli będzie musiało nastąpić cięcie beta, 0 jeżeli nie
+  Wpisz odpowiednie wartości alfa i beta do argumentów*/
 template<>
 int Graph<GameState>::Min(Vertex<GameState>* V, int *alpha, int* beta){
 
@@ -46,7 +51,9 @@ int Graph<GameState>::Min(Vertex<GameState>* V, int *alpha, int* beta){
     else return 0;
 }
 
-
+/*Wykonaj na wierzchołku V algorytm Max z algorytmu Minimax
+  Zwróć 1 jeżeli będzie musiało nastąpić cięcie alfa, 0 jeżeli nie
+  Wpisz odpowiednie wartości alfa i beta do argumentów*/
 template<>
 int Graph<GameState>::Max(Vertex<GameState>* V, int *alpha, int *beta){
 
@@ -69,6 +76,9 @@ int Graph<GameState>::Max(Vertex<GameState>* V, int *alpha, int *beta){
     else return 0;
 }
 
+/*Wykonuj rekursywnie algorytm minimax z alfa-beta cięciami na wierzchołku V i każdym jego kolejnym wierzchołku
+  Wartość alfa powinna teoretycznie być równa nieskonczoności a beta minus nieskonczoności
+  Są one na każdym poziomie przechodzenia przez ruchy ustawiane na wartości 100 i -100 */
 template<>
 int Graph<GameState>::Minimax(Vertex<GameState>* V, int* alpha, int* beta){
 
@@ -101,6 +111,7 @@ int Graph<GameState>::Minimax(Vertex<GameState>* V, int* alpha, int* beta){
     }
 }
 
+/*Zwróć ruch o największej wartości (czyli ruch najlepszy dla komputera po wykonaniu algorytmu minimax)*/
 template<>
 GameState Graph<GameState>::GetMaxMove(Vertex<GameState>* V){
 

@@ -5,6 +5,8 @@
 template<typename Type>
 class Edge;
 
+/*Wierzchołek grafu zawierającego obiekty typu Type
+  Jest on używany w grafie opisanego poprzez listy krawędzi i wierzchołków*/
 template<typename Type>
 class Vertex{
 
@@ -12,6 +14,7 @@ class Vertex{
 
         Type Object;
 
+        /*Pozycja danego wierzchołka w kolejce wierzchołków grafu*/
         Node<Vertex*>* Pos;
 
     public:
@@ -34,6 +37,10 @@ class Vertex{
 
         //virtual Dequeue<Edge>>* GetAdjListPos() const {return NULL;};
 
+        friend std::ostream &operator << (std::ostream &out, Vertex const &vertex); 
+
+            /* --- Poniższe wirtualne metody są opisane tylko przy innych reprezentacji grafu (listy i macierzy sąsiedztwa) --- */
+
         virtual int GetIndex() const {return 2;};
 
         virtual void SetIndex(int new_index){};
@@ -42,7 +49,7 @@ class Vertex{
 
         virtual void SetAdjList(Dequeue<Edge<Type>*>* new_adjlistpos){};
         
-        friend std::ostream &operator << (std::ostream &out, Vertex const &vertex);        
+       
 
 };
 

@@ -40,7 +40,7 @@ GameState::GameState(const GameState &GS){
 }
 
 
-void GameState::InsertChar(int x, int y){
+void GameState::MakeMove(int x, int y){
 
     if (x >= BOARD_SIZE || y >= BOARD_SIZE || x < 0 || y < 0) throw OUTSIDE_BOARD_ERR;
 
@@ -213,7 +213,7 @@ Dequeue<GameState> GameState::GeneratePossibleMoves() const{
 
     for(int i=0;i<BOARD_SIZE;i++){
         for(int j=0;j<BOARD_SIZE;j++){
-            try{GS_copy.InsertChar(i,j);}
+            try{GS_copy.MakeMove(i,j);}
             catch(const int error_type){
                 continue;
             }

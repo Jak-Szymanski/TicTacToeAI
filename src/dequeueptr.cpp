@@ -1,5 +1,7 @@
 #include "../inc/dequeueptr.h"
 
+
+/*Wyświetlenie kolejki wskaźników na wierzchołki (tak by nie wyświetlała ich adresów, tylko wartości)*/
 template <typename Type>
 std::ostream &operator << (std::ostream &out, Dequeue<Vertex<Type>*> const &dequeue){
 
@@ -17,7 +19,7 @@ std::ostream &operator << (std::ostream &out, Dequeue<Vertex<Type>*> const &dequ
   return out;
 }
 
-
+/*Wyświetlenie kolejki wskaźników na krawędzie (tak by nie wyświetlała ich adresów, tylko wartości)*/
 template <typename Type>
 std::ostream &operator << (std::ostream &out, Dequeue<Edge<Type>*> const &dequeue){
 

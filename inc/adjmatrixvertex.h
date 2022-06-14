@@ -2,11 +2,14 @@
 
 #include "vertex.h"
 
+/*Wierzchołek grafu zawierającego obiekty typu Type
+  Jest on rozszerzeniem zwykłego wierzchołka i jest używany w grafie opisanego przez macierz sąsiedztwa*/
 template<typename Type>
 class AdjacencyMatrixVertex: public Vertex<Type>{
 
     private:
 
+        /*Indeks wierzchołka w macierzy sąsiedztwa*/
         int Index;
 
     public:

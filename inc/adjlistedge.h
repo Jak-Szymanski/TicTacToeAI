@@ -2,13 +2,17 @@
 
 #include "adjlistvertex.h"
 
+/*Krawędź grafu zawierającego obiekty typu Type
+  Jest ona rozszerzeniem zwykłej krawędzi i jest używana w grafie opisanego przez listę sąsiedztwa*/
 template<typename Type>
 class AdjacencyListEdge: public Edge<Type>{
 
     private:
 
+        /*Pozycja danej krawędzi w kolejce sąsiedztwa wierzchołka na początku krawędzi*/
         Node<Edge<Type>*>* AdjListStart;
 
+        /*Pozycja danej krawędzi w kolejce sąsiedztwa wierzchołka na końcu krawędzi*/
         Node<Edge<Type>*>* AdjListEnd;
 
     public:

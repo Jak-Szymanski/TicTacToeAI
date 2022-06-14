@@ -3,11 +3,14 @@
 #include "graph.h"
 #include "adjmatrixvertex.h"
 
+/*Graf zawierający elementy typu Type opisany poprzez macierz sąsiedztwa
+  Jest on rozszerzeniem grafu opisanego przez samą listy krawędzi i wierzchołków*/
 template<typename Type>
 class AdjacencyMatrixGraph: public Graph<Type>{
 
     private:
 
+        /*Macierz sąsiedztwa - zawiera wskaźniki na krawędź w polu opisanym przez indeksy przylegąjacych do niej wierzchołków*/
         std::vector<std::vector<Edge<Type>*>> AdjacencyMatrix;
 
     public:
@@ -16,21 +19,32 @@ class AdjacencyMatrixGraph: public Graph<Type>{
 
         friend std::ostream &operator << (std::ostream &out, AdjacencyMatrixGraph<Type> const &graph);
 
+        /*Wstaw nowy wierzchołek zawierający element x, i zwróć wskaźnik na niego*/
         Vertex<Type>* InsertVertex(Type x);
 
+        /*Wstaw nową krawędź zawierająca element x i mająca dane wierzchołki końcowe, i zwróć wskaźnik na nią*/
         Edge<Type>* InsertEdge(int x, Vertex<Type>* start, Vertex<Type>* end);
 
-        Dequeue<Edge<Type>*> StartingEdges(Vertex<Type>* V) const;
-
+        /*Zwróć krawędzie przylegające do danego wierzchołka*/
         Dequeue<Edge<Type>*> IncidentEdges(Vertex<Type>* V) const;
 
+        /*Zwróć krawędzie zaczynające się z danego wierzchołka*/
+        Dequeue<Edge<Type>*> StartingEdges(Vertex<Type>* V) const;
+
+        /*Zwróć wierzchołki sąsiadujące z danym wierzchołkiem*/
         Dequeue<Vertex<Type>*> AdjacentVertices(Vertex<Type>* V) const;
 
+        /*Czy dane wierzchołki ze sobą sąsiadują*/
         bool AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2) const;
 
+        /*Usuń daną krawędź*/
         void RemoveEdge(Edge<Type>* E);
 
+        /*Usuń dany wierzchołek*/
         void RemoveVertex(Vertex<Type>* V);
+
+        /*Wyczyść cały graf*/
+        void Delete();
 
 };
 
@@ -201,4 +215,13 @@ std::ostream &operator << (std::ostream &out, AdjacencyMatrixGraph<Type> const &
         }
     }
     return out;
+}
+
+template<typename Type>
+void AdjacencyMatrixGraph<Type>::Delete(){
+
+    VQueue.Delete();
+    EQueue.Delete();
+    AdjacencyMatrix.clear();
+    AdjacencyMatrix.resize(0); 
 }

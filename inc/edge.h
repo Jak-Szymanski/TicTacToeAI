@@ -2,17 +2,23 @@
 
 #include "vertex.h"
 
+/*Krawędź grafu zawierającego obiekty typu Type
+  Jest ona używana w grafie opisanego poprzez listy krawędzi i wierzchołków*/
 template<typename Type>
 class Edge{
 
     private:
 
+        /*Krawędź zawsze zawiera obiekty typu int*/
         int Object;
 
+        /*Wskaźnik na wierzchołek na początku krawędzi*/
         Vertex<Type>* Start;
 
+        /*Wskaźnik na wierzchołek na końcu krawędzi*/
         Vertex<Type>* End;
 
+        /*Pozycja danej krawędzi w kolejce krawędzi grafu*/
         Node<Edge<Type>*>* Pos;
 
     public:
@@ -37,12 +43,13 @@ class Edge{
 
         void SetEnd(Vertex<Type>* new_end) {End = new_end;};
 
+        friend std::ostream &operator << (std::ostream &out, Edge<Type> const &edge);
+
+        /* --- Poniższe wirtualne metody są opisane tylko przy innych reprezentacji grafu (listy i macierzy sąsiedztwa) --- */
+
         virtual Node<Edge<Type>*>* GetAdjListStart() {return NULL;};
 
         virtual Node<Edge<Type>*>* GetAdjListEnd() {return NULL;};
-
-        friend std::ostream &operator << (std::ostream &out, Edge<Type> const &edge);
-
 };
 
 template<typename Type>

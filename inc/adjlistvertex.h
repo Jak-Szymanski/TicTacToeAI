@@ -2,11 +2,14 @@
 
 #include "graph.h"
 
+/*Wierzchołek grafu zawierającego obiekty typu Type
+  Jest on rozszerzeniem zwykłego wierzchołka i jest używany w grafie opisanego przez listę sąsiedztwa*/
 template<typename Type>
 class AdjacencyListVertex: public Vertex<Type>{
 
     private:
 
+        /*Lista sąsiedztwa dla danego wierzchołka*/
         Dequeue<Edge<Type>*>* AdjList;
 
     public:

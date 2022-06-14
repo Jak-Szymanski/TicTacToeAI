@@ -5,6 +5,7 @@
 #include <fstream> 
 #include <iostream>
 
+/*Węzęł kolejki dwukierunkowej o elemencie typu Type*/
 template<typename Type>
 class Node{
 

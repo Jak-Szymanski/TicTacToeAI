@@ -2,12 +2,14 @@
 
 #include "adjlistedge.h"
 
-
+/*Graf zawierający elementy typu Type opisany poprzez listę sąsiedztwa
+  Jest on rozszerzeniem grafu opisanego przez samą listy krawędzi i wierzchołków*/
 template<typename Type>
 class AdjacencyListGraph: public Graph<Type>{
 
     private:
 
+        /*Lista sąsiedztwa (zawiera listy sąsiadujących krawędzi dla każdego z wierzchołków)*/
         Dequeue<Dequeue<Edge<Type>*>> AdjacencyList;
 
     public:
@@ -20,19 +22,32 @@ class AdjacencyListGraph: public Graph<Type>{
 
         //Dequeue<Dequeue<AdjacencyListEdge*>> GetAdjacencyList() const {return AdjacencyList;};
 
+        /*Wstaw nowy wierzchołek zawierający element x, i zwróć wskaźnik na niego*/
         Vertex<Type>* InsertVertex(Type x);
 
+        /*Wstaw nową krawędź zawierająca element x i mająca dane wierzchołki końcowe, i zwróć wskaźnik na nią*/
         Edge<Type>* InsertEdge(int x, Vertex<Type>* start, Vertex<Type>* end);
 
-        Dequeue<Edge<Type>*> StartingEdges(Vertex<Type>* V) const;
-
+        /*Zwróć krawędzie przylegające do danego wierzchołka*/
         Dequeue<Edge<Type>*> IncidentEdges(Vertex<Type>* V) const;
 
+        /*Zwróć krawędzie zaczynające się z danego wierzchołka*/
+        Dequeue<Edge<Type>*> StartingEdges(Vertex<Type>* V) const;
+
+        /*Zwróć wierzchołki sąsiadujące z danym wierzchołkiem*/
         Dequeue<Vertex<Type>*> AdjacentVertices(Vertex<Type>* V) const;
 
+        /*Czy dane wierzchołki ze sobą sąsiadują*/
         bool AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2) const;
 
+        /*Usuń daną krawędź*/
         void RemoveEdge(Edge<Type>* E);
+
+        /*Wyczyść cały graf*/
+        void Delete();
+
+                                                    //Napisać remove vertex!!!
+
 
 };
 
@@ -217,3 +232,10 @@ void AdjacencyListGraph<Type>::RemoveEdge(Edge<Type>* E){
     delete ptr;
 }
 
+template<typename Type>
+void AdjacencyListGraph<Type>::Delete(){
+
+    VQueue.Delete();
+    EQueue.Delete();
+    AdjacencyList.Delete();
+}
