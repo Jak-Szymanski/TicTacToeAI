@@ -2,7 +2,7 @@
 
 
 /*Wyświetlenie kolejki wskaźników na wierzchołki (tak by nie wyświetlała ich adresów, tylko wartości)*/
-template <typename Type>
+/* template <typename Type>
 std::ostream &operator << (std::ostream &out, Dequeue<Vertex<Type>*> const &dequeue){
 
    if(dequeue.IsEmpty()){
@@ -11,15 +11,14 @@ std::ostream &operator << (std::ostream &out, Dequeue<Vertex<Type>*> const &dequ
   }
 
   Node<Vertex<Type>*> *ptr = dequeue.GetHead();
-  while(ptr->GetNext() != NULL){
+  while(ptr != NULL){
     out << *ptr->GetElem() << std::endl;
     ptr = ptr->GetNext();
-  }
-  out << *ptr->GetElem(); 
+  } 
   return out;
 }
 
-/*Wyświetlenie kolejki wskaźników na krawędzie (tak by nie wyświetlała ich adresów, tylko wartości)*/
+//Wyświetlenie kolejki wskaźników na krawędzie (tak by nie wyświetlała ich adresów, tylko wartości)
 template <typename Type>
 std::ostream &operator << (std::ostream &out, Dequeue<Edge<Type>*> const &dequeue){
 
@@ -29,10 +28,24 @@ std::ostream &operator << (std::ostream &out, Dequeue<Edge<Type>*> const &dequeu
   }
 
   Node<Edge<Type>*> *ptr = dequeue.GetHead();
-  while(ptr->GetNext() != NULL){
+  while(ptr != NULL){
     out << *ptr->GetElem() << std::endl;
     ptr = ptr->GetNext();
   }
-  out << *ptr->GetElem(); 
   return out;
 }
+ */
+/* template<>
+void Dequeue<Edge<int>*>::Delete(){
+
+  Node<Edge<int>*> *ptr = Head;
+  Node<Edge<int>*> *next;
+  Head = NULL;
+
+  while(ptr != NULL){
+    next = ptr->Next;
+    delete ptr->Elem;;
+    delete ptr;
+    ptr = next;
+  }
+} */

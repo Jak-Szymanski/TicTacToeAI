@@ -41,6 +41,8 @@ class Dequeue{
     /* Wyczyść całą kolejkę */
     void Delete();
 
+    // void Delete<Type*>();
+
     /* Czy kolejka jest pusta */
     bool IsEmpty() const {return !Head;};
 
@@ -53,25 +55,25 @@ class Dequeue{
     void SetTail(Node<Type> *new_tail){Tail = new_tail;};
 
     /*Wyświetlanie kolejki*/
-    friend std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue);
+    friend std::ostream &operator << (std::ostream &out, Dequeue<Type*> const &dequeue);
 
 };
 
 
 template<typename Type>
-std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue){
+std::ostream &operator << (std::ostream &out, Dequeue<Type*> const &dequeue){
 
    if(dequeue.IsEmpty()){
     out << "Kolejka jest pusta" << std::endl;
     return out;
   }
 
-  Node<Type> *ptr = dequeue.GetHead();
-  while(ptr->GetNext() != NULL){
-    out << ptr->GetElem() << std::endl;
+  Node<Type*> *ptr = dequeue.GetHead();
+  while(ptr != NULL){
+    if(std::is_pointer<Type>::value) out << *ptr->GetElem() << std::endl;
+    else out << ptr->GetElem() << std::endl;
     ptr = ptr->GetNext();
   }
-  out << ptr->GetElem(); 
   return out;
 }
 
@@ -230,6 +232,7 @@ void Dequeue<Type>::Delete(){
 
   while(ptr != NULL){
     next = ptr->Next;
+   // if(std::is_pointer<Type>::value) delete *ptr->Elem;
     delete ptr;
     ptr = next;
   }

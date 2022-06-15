@@ -56,7 +56,7 @@ int main(){
                         
         // AdjacencyListGraph<int> testgraph;
         // AdjacencyMatrixGraph<int> testgraph;
-
+        Graph<int> testgraph;
             for(int j=0; j<num_tests; j++){     //po 100 testów
                 n=0;
                 Graph<int> testgraph = Graph<int>();
@@ -65,6 +65,7 @@ int main(){
                         random_int = rand() % 10;
                         testgraph.InsertVertex(random_int);
                         n++;
+                        std::cout << *testgraph.Vertices();
                     }
                     for(int i=0; i<on[l]; i++){
                         random_int = rand() % 10;
@@ -123,7 +124,7 @@ int main(){
 
             }
 
-            //testgraph.Delete();
+            testgraph.Delete();
             output_file << (float)(2*num_edges)/(num_vertices*(num_vertices-1)) << "," << num_vertices << ",";
             output_file << incident_edges/num_tests << "," << are_adjacent/num_tests << "," << insert_vertex/num_tests << "," << insert_edge/num_tests << ",";
             output_file << remove_vertex/num_tests << "," << remove_edge/num_tests << std::endl;
