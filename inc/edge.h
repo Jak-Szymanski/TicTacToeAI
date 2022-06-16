@@ -43,7 +43,10 @@ class Edge{
 
         void SetEnd(Vertex<Type>* new_end) {End = new_end;};
 
+        template<typename Type>
         friend std::ostream &operator << (std::ostream &out, Edge<Type> const &edge);
+
+        virtual void Delete();
 
         /* --- Poniższe wirtualne metody są opisane tylko przy innych reprezentacji grafu (listy i macierzy sąsiedztwa) --- */
 
@@ -84,4 +87,11 @@ Edge<Type>::Edge(int x, Vertex<Type>* new_start, Vertex<Type>* new_end){
     Pos = NULL;
 }
 
+template<typename Type>
+void Edge<Type>::Delete(){
+    //free(Start);
+    //free(End);
+   // delete Pos->Elem;
+    free(Pos);
+}
 

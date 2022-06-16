@@ -31,6 +31,7 @@ class AdjacencyListEdge: public Edge<Type>{
 
         Node<Edge<Type>*>* GetAdjListEnd() {return AdjListEnd;};
 
+        void Delete();
 
     
 };
@@ -66,4 +67,11 @@ AdjacencyListEdge<Type>::AdjacencyListEdge(Edge<Type> E){
     SetEnd(E.GetEnd());
     AdjListStart = NULL;
     AdjListEnd = NULL;
+}
+
+template<typename Type>
+void AdjacencyListEdge<Type>::Delete(){
+    //free(AdjListStart);
+    //free(AdjListEnd);
+    free(GetPos());
 }

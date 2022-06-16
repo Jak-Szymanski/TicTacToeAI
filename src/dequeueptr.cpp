@@ -2,7 +2,7 @@
 
 
 /*Wyświetlenie kolejki wskaźników na wierzchołki (tak by nie wyświetlała ich adresów, tylko wartości)*/
-/* template <typename Type>
+template <typename Type>
 std::ostream &operator << (std::ostream &out, Dequeue<Vertex<Type>*> const &dequeue){
 
    if(dequeue.IsEmpty()){
@@ -34,7 +34,7 @@ std::ostream &operator << (std::ostream &out, Dequeue<Edge<Type>*> const &dequeu
   }
   return out;
 }
- */
+
 /* template<>
 void Dequeue<Edge<int>*>::Delete(){
 
@@ -44,8 +44,7 @@ void Dequeue<Edge<int>*>::Delete(){
 
   while(ptr != NULL){
     next = ptr->Next;
-    delete ptr->Elem;;
-    delete ptr;
+    ptr->Elem->Delete();
     ptr = next;
   }
 } */

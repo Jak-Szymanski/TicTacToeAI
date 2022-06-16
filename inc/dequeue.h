@@ -41,6 +41,8 @@ class Dequeue{
     /* Wyczyść całą kolejkę */
     void Delete();
 
+   // void DeletePtr();
+
     // void Delete<Type*>();
 
     /* Czy kolejka jest pusta */
@@ -55,20 +57,21 @@ class Dequeue{
     void SetTail(Node<Type> *new_tail){Tail = new_tail;};
 
     /*Wyświetlanie kolejki*/
-    friend std::ostream &operator << (std::ostream &out, Dequeue<Type*> const &dequeue);
+    template<typename Type>
+    friend std::ostream &operator<< (std::ostream &out, Dequeue<Type> const &dequeue);
 
 };
 
 
 template<typename Type>
-std::ostream &operator << (std::ostream &out, Dequeue<Type*> const &dequeue){
+std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue){
 
    if(dequeue.IsEmpty()){
     out << "Kolejka jest pusta" << std::endl;
     return out;
   }
 
-  Node<Type*> *ptr = dequeue.GetHead();
+  Node<Type> *ptr = dequeue.GetHead();
   while(ptr != NULL){
     if(std::is_pointer<Type>::value) out << *ptr->GetElem() << std::endl;
     else out << ptr->GetElem() << std::endl;
@@ -229,14 +232,54 @@ void Dequeue<Type>::Delete(){
   Node<Type> *ptr = Head;
   Node<Type> *next;
   Head = NULL;
+  Tail = NULL;
+  free(Head);
+  free(Tail);
 
   while(ptr != NULL){
     next = ptr->Next;
    // if(std::is_pointer<Type>::value) delete *ptr->Elem;
-    delete ptr;
+    ptr->Elem->Delete();
+    //delete ptr;
     ptr = next;
   }
 }
+
+/* template<typename Type*>
+void Dequeue<Type*>::Delete(){
+
+  Node<Type*> *ptr = Head;
+  Node<Type*> *next;
+  Head = NULL;
+  Tail = NULL;
+  free(Head);
+  free(Tail);
+
+  while(ptr != NULL){
+    next = ptr->Next;
+   // if(std::is_pointer<Type>::value) delete *ptr->Elem;
+    ptr->Elem->Delete();
+    //delete ptr;
+    ptr = next;
+  }
+} */
+
+
+// Wyczyść całą kolejkę
+/* template<typename Type>
+void Dequeue<Type>::DeletePtr(){
+
+  Node<Type> *ptr = Head;
+  Node<Type> *next;
+  Head = NULL;
+
+  while(ptr != NULL){
+    next = ptr->Next;
+    delete *ptr->Elem;
+    delete ptr;
+    ptr = next;
+  }
+} */
 
 /* Wyświetl całą kolejkę idąc od końca
 (funkcja była używana jedynie do testów poprawności działania kolejki w obu kierunkach) */

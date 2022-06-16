@@ -213,7 +213,9 @@ void Graph<Type>::RemoveEdge(Edge<Type>* E){
 
     ptr->GetPrev()->SetNext(ptr->GetNext());
     ptr->GetNext()->SetPrev(ptr->GetPrev());
-    delete ptr;
+    //E->Delete();
+  //  delete ptr;
+    E->Delete();
 }
 
 template<typename Type>
@@ -239,15 +241,24 @@ void Graph<Type>::RemoveVertex(Vertex<Type>* V){
 
     ptr_v->GetPrev()->SetNext(ptr_v->GetNext());
     ptr_v->GetNext()->SetPrev(ptr_v->GetPrev());
-    delete ptr_v;
+   //V->Delete();
+  //  delete ptr_v;
+  //  delete ptr_e;
+   V->Delete();
 }
+
 
 
 template<typename Type>
 void Graph<Type>::Delete(){
 
-    VQueue.Delete();
-    EQueue.Delete();
+   // if(std::is_pointer<Type>::value){
+/*         VQueue.DeletePtr();
+        EQueue.DeletePtr(); */
+   // } else {
+        VQueue.Delete();
+        EQueue.Delete();
+    //}
 }
 
 

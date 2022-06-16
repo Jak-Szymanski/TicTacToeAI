@@ -35,9 +35,12 @@ class Vertex{
 
         void SetCost(int new_cost) {Object.SetCost(new_cost);};
 
+        void Delete();
+
         //virtual Dequeue<Edge>>* GetAdjListPos() const {return NULL;};
 
-        friend std::ostream &operator << (std::ostream &out, Vertex const &vertex); 
+        template<typename Type>
+        friend std::ostream &operator << (std::ostream &out, Vertex<Type> const &vertex); 
 
             /* --- Poniższe wirtualne metody są opisane tylko przy innych reprezentacji grafu (listy i macierzy sąsiedztwa) --- */
 
@@ -78,6 +81,12 @@ template<typename Type>
 bool Vertex<Type>::operator== (const Vertex<Type> &V) const{
 
     return (Object == V.GetObject() && Pos == V.GetPos());
+}
+
+template<typename Type>
+void Vertex<Type>::Delete(){
+    //delete Pos->Elem;
+    free(Pos);
 }
 
 

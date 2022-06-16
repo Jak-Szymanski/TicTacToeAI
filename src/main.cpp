@@ -21,25 +21,29 @@ int main(){
 
     if(test == 1){
 
-    std::ofstream output_file("graph.csv");
+    // std::ofstream output_file("graph.csv");
     // std::ofstream output_file("adjlistgraph.csv");
-    // std::ofstream output_file("adjmatgraph.csv");
+    std::ofstream output_file("adjmatgraph.csv");
 
-    output_file << "gestosc,ilosc wierzcholkow,IncidentEdges,AreAdjacent,InsertVertex,InsertEdge,RemoveVertex,RemoveEdge" << std::endl;
+            // AdjacencyListGraph<int> testgraph;
+        AdjacencyMatrixGraph<int> testgraph;
+        // Graph<int> testgraph;
+
+    output_file << "gestosc,ilosc wierzcholkow,ilosc krawedzi,IncidentEdges,AreAdjacent,InsertVertex,InsertEdge,RemoveVertex,RemoveEdge" << std::endl;
 
     Vertex<int> *V1, *V2, *V3, *V4, *V5, *V6, *V7, *V8;
     Edge<int>* E1, *E2;
     int n = 0;
-    int num_vert[5] = {24,48,100,480,1000};
+    int num_vert[5] = {24,48,100,240,480};
     int off[4] = {3,2,1,0};             //tablice off i on decyduja o gestosci grafu
     int on[4] = {1,2,3,4};              //on[0],off[0] -> 25%; num[1],num[1] -> 50%, dla 3 -> 75%, dla 4 -> 100%
     int random_int;
-    int incident_edges = 0;
-    int are_adjacent = 0;
-    int insert_vertex = 0;
-    int insert_edge = 0;
-    int remove_edge = 0;
-    int remove_vertex = 0;
+    float incident_edges = 0;
+    float are_adjacent = 0;
+    float insert_vertex = 0;
+    float insert_edge = 0;
+    float remove_edge = 0;
+    float remove_vertex = 0;
     int num_tests = 100;
     int num_vertices;
     int num_edges;
@@ -47,25 +51,25 @@ int main(){
     for(int l=0; l<4; l++){                     //różne gestosci
 
         for(int k=0; k<5; k++){                      //różne wielkości grafu
-                int incident_edges = 0;
-                int are_adjacent = 0;
-                int insert_vertex = 0;
-                int insert_edge = 0;
-                int remove_edge = 0;
-                int remove_vertex = 0;
+                incident_edges = 0;
+                are_adjacent = 0;
+                insert_vertex = 0;
+                insert_edge = 0;
+                remove_edge = 0;
+                remove_vertex = 0;
                         
-        // AdjacencyListGraph<int> testgraph;
-        // AdjacencyMatrixGraph<int> testgraph;
-        Graph<int> testgraph;
+
             for(int j=0; j<num_tests; j++){     //po 100 testów
                 n=0;
-                Graph<int> testgraph = Graph<int>();
+                //Graph<int> testgraph = Graph<int>();
                 while(n < num_vert[k]){         //pętla aż dojdziemy do danej wielkosci grafu
                     for(int i=0; i<off[l]; i++){                 
                         random_int = rand() % 10;
                         testgraph.InsertVertex(random_int);
+                        //std::cout << testgraph << std::endl;
+
                         n++;
-                        std::cout << *testgraph.Vertices();
+                        //std::cout << *testgraph.Vertices();
                     }
                     for(int i=0; i<on[l]; i++){
                         random_int = rand() % 10;
@@ -93,39 +97,49 @@ int main(){
 
             auto start = std::chrono::steady_clock::now();
             testgraph.IncidentEdges(V1);
-            auto end = std::chrono::steady_clock::now();
+            // std::cout << "1" << std::endl;
+             auto end = std::chrono::steady_clock::now();
             incident_edges += std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
 
             start = std::chrono::steady_clock::now();
             testgraph.AreAdjacent(V1, V2);
+                        // std::cout << "1" << std::endl;
             end = std::chrono::steady_clock::now();
             are_adjacent += std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
 
             start = std::chrono::steady_clock::now();
             V3 = testgraph.InsertVertex(1);
+                        // std::cout << "1" << std::endl;
             end = std::chrono::steady_clock::now();
             insert_vertex += std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
 
             start = std::chrono::steady_clock::now();
             E1 = testgraph.InsertEdge(1,V1,V3);
+                        // std::cout << "1" << std::endl;
             end = std::chrono::steady_clock::now();
             insert_edge += std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
 
             start = std::chrono::steady_clock::now();
             testgraph.RemoveEdge(E1);
+                        std::cout << "3" << std::endl;
             end = std::chrono::steady_clock::now();
             remove_edge += std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
 
             start = std::chrono::steady_clock::now();
             testgraph.RemoveVertex(V2);
+                        std::cout << "2" << std::endl;
             end = std::chrono::steady_clock::now();
             remove_vertex += std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
 
 
-            }
-
             testgraph.Delete();
-            output_file << (float)(2*num_edges)/(num_vertices*(num_vertices-1)) << "," << num_vertices << ",";
+                std::cout << "delete";
+            }
+            // std::cout << "przed  "  << testgraph << std::endl << std::endl ;
+           //testgraph.Delete();
+            // std::cout << "po     " << testgraph << std::endl << std::endl;
+             
+            output_file << (float)(2*num_edges)/(num_vertices*(num_vertices-1)) << "," << num_vertices << "," << num_edges << ",";
             output_file << incident_edges/num_tests << "," << are_adjacent/num_tests << "," << insert_vertex/num_tests << "," << insert_edge/num_tests << ",";
             output_file << remove_vertex/num_tests << "," << remove_edge/num_tests << std::endl;
         }

@@ -163,7 +163,7 @@ Vertex<Type>* AdjacencyListGraph<Type>::InsertVertex(Type x){
     
     AdjacencyList.InsertEnd(*tmp_adjlist);
     V->SetAdjList(tmp_adjlist);
-    std::cout << "vertex: " << tmp_adjlist << std::endl;
+   // std::cout << "vertex: " << tmp_adjlist << std::endl;
 
     Vertices()->InsertFront(V);
     Vertices()->GetHead()->GetElem()->SetPos(Vertices()->GetHead());
@@ -179,7 +179,7 @@ Edge<Type>* AdjacencyListGraph<Type>::InsertEdge(int x, Vertex<Type>* start, Ver
         Edges()->InsertFront(E);
     Edges()->GetHead()->GetElem()->SetPos(Edges()->GetHead());
 
-    std::cout << "edge: "<< start->GetAdjList() << std::endl << std::endl;
+    //std::cout << "edge: "<< start->GetAdjList() << std::endl << std::endl;
 
     start->GetAdjList()->InsertEnd(E);
 
@@ -229,13 +229,25 @@ void AdjacencyListGraph<Type>::RemoveEdge(Edge<Type>* E){
     if(ptr->GetPrev() != NULL){
         ptr->GetPrev()->SetNext(ptr->GetNext());
     }
-    delete ptr;
+   // E->Delete();
 }
+
+
 
 template<typename Type>
 void AdjacencyListGraph<Type>::Delete(){
 
-    VQueue.Delete();
-    EQueue.Delete();
-    AdjacencyList.Delete();
+    Vertices()->Delete();
+    Edges()->Delete();
+    //AdjacencyList.Delete();
+    Node<Dequeue<Edge<Type>*>>* ptr = AdjacencyList.GetHead();
+    Node<Dequeue<Edge<Type>*>>* next;
+    //free(AdjacencyList.GetHead());
+    //free(AdjacencyList.GetTail());
+
+     while(ptr != NULL){
+        next = ptr->GetNext();
+        ptr->GetElem().Delete();
+        ptr = next;
+    }
 }

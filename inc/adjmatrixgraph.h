@@ -11,11 +11,12 @@ class AdjacencyMatrixGraph: public Graph<Type>{
     private:
 
         /*Macierz sąsiedztwa - zawiera wskaźniki na krawędź w polu opisanym przez indeksy przylegąjacych do niej wierzchołków*/
-        std::vector<std::vector<Edge<Type>*>> AdjacencyMatrix;
+        // std::vector<std::vector<Edge<Type>*>> AdjacencyMatrix;
+        Edge<Type>*** AdjacencyMatrix; 
 
     public:
 
-       // AdjacencyMatrixGraph(const Graph G);
+       // AdjacencyMatrixGraph();
 
         friend std::ostream &operator << (std::ostream &out, AdjacencyMatrixGraph<Type> const &graph);
 
@@ -48,15 +49,51 @@ class AdjacencyMatrixGraph: public Graph<Type>{
 
 };
 
+
 template<typename Type>
 Vertex<Type>* AdjacencyMatrixGraph<Type>::InsertVertex(Type x){
 
     auto V = new AdjacencyMatrixVertex<Type>(x);
+        int size = NumberVertices();
 
-    int new_size = NumberVertices() + 1;
-    V->SetIndex(new_size-1);
-    AdjacencyMatrix.resize(new_size, std::vector<Edge<Type>*>(new_size, NULL));
-    for (auto &row: AdjacencyMatrix) row.resize(new_size, NULL);
+    Edge<Type>*** copy = new Edge<Type>**[size];
+    for(int i=0; i < size; i++){
+        copy[i] = new Edge<Type>*[size];
+    }
+
+    for(int i=0; i<size; i++){
+        for(int j=0; j<size; j++){
+            copy[i][j] = AdjacencyMatrix[i][j];
+            //AdjacencyMatrix[i][j]->Delete();
+           // delete AdjacencyMatrix[i][j];
+        }
+        delete[] AdjacencyMatrix[i];
+    }
+    delete[] AdjacencyMatrix;
+
+    AdjacencyMatrix = new Edge<Type>**[size+1];
+    for(int i=0; i < size+1; i++){
+        AdjacencyMatrix[i] = new Edge<Type>*[size+1];
+    }
+
+    for(int i=0; i<size; i++){
+        for(int j=0; j<size; j++){
+            AdjacencyMatrix[i][j] = copy[i][j];
+           // copy[i][j]->Delete();
+           // delete copy[i][j];
+        }
+        delete [] copy[i];
+    }
+    delete[] copy;
+
+    for(int i=0; i<size; i++){
+        AdjacencyMatrix[size-1][i] = NULL;
+        AdjacencyMatrix[i][size-1] = NULL;
+    }
+
+    V->SetIndex(size);
+    //AdjacencyMatrix.resize(size+1, std::vector<Edge<Type>*>(new_size+1, NULL));
+    //for (auto &row: AdjacencyMatrix) row.resize(new_size, NULL);
     Vertices()->InsertFront(V);
     Vertices()->GetHead()->GetElem()->SetPos(Vertices()->GetHead());
     return V;
@@ -95,6 +132,7 @@ Dequeue<Edge<Type>*> AdjacencyMatrixGraph<Type>::StartingEdges(Vertex<Type>* V) 
 template<typename Type>
  Dequeue<Edge<Type>*> AdjacencyMatrixGraph<Type>::IncidentEdges(Vertex<Type>* V) const {
 
+    std::cout << "incident";
     int j = V->GetIndex();
     Dequeue<Edge<Type>*> tmp_incident;
     int size = NumberVertices();
@@ -129,10 +167,16 @@ bool AdjacencyMatrixGraph<Type>::AreAdjacent(Vertex<Type>* V1, Vertex<Type>* V2)
 
 template<typename Type>
 void AdjacencyMatrixGraph<Type>::RemoveEdge(Edge<Type>* E){
+    std::cout << "edge" << std::endl;
 
-    AdjacencyMatrix[E->GetStart()->GetIndex()][E->GetEnd()->GetIndex()] = NULL;
-
+    std::cout << E->GetStart()->GetIndex();
+    std::cout << "   " << E->GetEnd()->GetIndex() << std::endl;
+    AdjacencyMatrix[E->GetStart()->GetIndex()][E->GetEnd()->GetIndex()];    
+    std::cout << "bruh" << std::endl;     //przetestować to zwalnianie
+    
     Node<Edge<Type>*>* ptr = E->GetPos();
+
+    
 
     if(ptr == Edges()->GetHead()){
         Edges()->RemoveFirst();
@@ -142,10 +186,12 @@ void AdjacencyMatrixGraph<Type>::RemoveEdge(Edge<Type>* E){
         Edges()->RemoveLast();
         return;
     }
+            
 
     ptr->GetPrev()->SetNext(ptr->GetNext());
     ptr->GetNext()->SetPrev(ptr->GetPrev());
-    delete ptr;
+    //E->Delete();
+    //delete ptr;
 }
 
 
@@ -153,21 +199,61 @@ template<typename Type>
 void AdjacencyMatrixGraph<Type>::RemoveVertex(Vertex<Type>* V){
 
    Node<Edge<Type>*>* ptr_e = IncidentEdges(V).GetHead();
+       std::cout << "przedprzed";
 
     while(ptr_e != NULL){
         RemoveEdge(ptr_e->GetElem());
         ptr_e = ptr_e->GetNext();
     }
 
-    int index = V->GetIndex();
-    AdjacencyMatrix.erase(AdjacencyMatrix.begin() + index);
+    std::cout << "po";
 
-    for(int i=0; i<AdjacencyMatrix.size(); i++){
-        if(AdjacencyMatrix[i].size() > index){
-            AdjacencyMatrix[i].erase(AdjacencyMatrix[i].begin() + index);
-        }
+
+    int index = V->GetIndex();
+    int size = NumberVertices();
+    
+
+    Edge<Type>*** copy = new Edge<Type>**[size-1];
+    for(int i=0; i < size-1; i++){
+        copy[i] = new Edge<Type>*[size-1];
     }
 
+    int k = 0;      //iteracja po kopii (bo trzeba usunąć komórki z indeksem wierzchołka)
+    int l = 0;
+
+    std::cout << "przed";
+    for(int i=0; i<size; i++){
+        l = 0;
+        if(i==index){
+            delete[] AdjacencyMatrix[i];
+            continue;
+        }
+        for(int j=0; j<size; j++){
+            if(i != index && j != index){
+                copy[k][l] = AdjacencyMatrix[i][j];
+                //delete AdjacencyMatrix[i][j];
+                l++;
+            }
+        }
+        k++;
+        delete[] AdjacencyMatrix[i];
+    }
+    delete[] AdjacencyMatrix;
+
+    std::cout << "po";
+    AdjacencyMatrix = new Edge<Type>**[size-1];
+    for(int i=0; i < size-1; i++){
+        AdjacencyMatrix[i] = new Edge<Type>*[size-1];
+    }
+
+    for(int i=0; i<size-1; i++){
+        for(int j=0; j<size-1; j++){
+            AdjacencyMatrix[i][j] = copy[i][j];
+           // delete copy[i][j];
+        }
+        delete[] copy[i];
+    }
+    delete[] copy;
 
     Node<Vertex<Type>*>* ptr_v = V->GetPos();
 
@@ -188,7 +274,8 @@ void AdjacencyMatrixGraph<Type>::RemoveVertex(Vertex<Type>* V){
         next->GetElem()->SetIndex(next->GetElem()->GetIndex() - 1);
         next = next->GetNext();
     }
-    delete ptr_v;
+    V->Delete();
+    //delete ptr_v;
 }
 
 
@@ -220,8 +307,16 @@ std::ostream &operator << (std::ostream &out, AdjacencyMatrixGraph<Type> const &
 template<typename Type>
 void AdjacencyMatrixGraph<Type>::Delete(){
 
-    VQueue.Delete();
-    EQueue.Delete();
-    AdjacencyMatrix.clear();
-    AdjacencyMatrix.resize(0); 
+    Vertices()->Delete();
+    Edges()->Delete();
+
+    int size = NumberVertices();
+    for(int i=0; i<size; i++){
+        for(int j=0;j<size; j++){
+            delete AdjacencyMatrix[i][j];           //zobaczyć czy to coś zmienia
+        }
+        delete[] AdjacencyMatrix[i];
+    }
+    delete[] AdjacencyMatrix;
+
 }
