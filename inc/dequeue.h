@@ -2,7 +2,6 @@
 
 #include "node.h"
 
-
 /* Kolejka dwukierunkowa zawierająca elementy typu Type */
 template<typename Type>
 class Dequeue{
@@ -20,7 +19,7 @@ class Dequeue{
     /* Wstaw nowy element na początek kolejki*/
     void InsertFront(Type new_pack);
 
-    /* Wstaw nowy element na koniec kolejki */   
+    /* Wstaw nowy element na koniec kolejki */ 
     void InsertEnd(Type new_pack);
 
     /* Usuń i zwróć pierwszy element */
@@ -32,37 +31,27 @@ class Dequeue{
     /* Usuń i zwróć n-ty element */
     Type Remove(int n);
 
-    /* Zwróć losowy element */
-    Type GetRandomElem();
-
     /*Zwróć rozmiar kolejki*/
     int Size() const;
 
     /* Wyczyść całą kolejkę */
     void Delete();
 
-   // void DeletePtr();
-
-    // void Delete<Type*>();
-
     /* Czy kolejka jest pusta */
     bool IsEmpty() const {return !Head;};
 
-    Node<Type>* const GetHead() const{return Head;};
+    Node<Type> * const GetHead() const{return Head;};
 
-    Node<Type>* const GetTail() const{return Tail;};
+    Node<Type> * const GetTail() const{return Tail;};
 
     void SetHead(Node<Type> *new_head){Head = new_head;};
 
     void SetTail(Node<Type> *new_tail){Tail = new_tail;};
 
-    /*Wyświetlanie kolejki*/
-    template<typename Type>
-    friend std::ostream &operator<< (std::ostream &out, Dequeue<Type> const &dequeue);
-
+    void PrintEnd();
 };
 
-
+/*Wyświetlanie kolejki*/
 template<typename Type>
 std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue){
 
@@ -72,11 +61,11 @@ std::ostream &operator << (std::ostream &out, Dequeue<Type> const &dequeue){
   }
 
   Node<Type> *ptr = dequeue.GetHead();
-  while(ptr != NULL){
-    if(std::is_pointer<Type>::value) out << *ptr->GetElem() << std::endl;
-    else out << ptr->GetElem() << std::endl;
+  while(ptr->GetNext() != NULL){
+    out << ptr->GetElem() << std::endl;
     ptr = ptr->GetNext();
   }
+  out << ptr->GetElem(); 
   return out;
 }
 
@@ -209,77 +198,21 @@ Type Dequeue<Type>::Remove(int n){
   return pack;
 }  
 
-template<typename Type>
-Type Dequeue<Type>::GetRandomElem(){
-
-  if (IsEmpty()) return NULL;
-  int size = Size();
-
-  
-  int n = rand() % size;
-
-  Node<Type>* ptr = Head;
-  for(int i=0;i<n; i++){
-    ptr = ptr->Next;
-  }
-  return ptr->Elem;
-}
-
 // Wyczyść całą kolejkę
-template<typename Type>
-void Dequeue<Type>::Delete(){
+template<typename T>
+void Dequeue<T>::Delete(){
 
-  Node<Type> *ptr = Head;
-  Node<Type> *next;
-  Head = NULL;
-  Tail = NULL;
+  Node<T> *ptr = Head;
+  Node<T> *next;
   free(Head);
   free(Tail);
 
   while(ptr != NULL){
     next = ptr->Next;
-   // if(std::is_pointer<Type>::value) delete *ptr->Elem;
-    ptr->Elem->Delete();
-    //delete ptr;
-    ptr = next;
-  }
-}
-
-/* template<typename Type*>
-void Dequeue<Type*>::Delete(){
-
-  Node<Type*> *ptr = Head;
-  Node<Type*> *next;
-  Head = NULL;
-  Tail = NULL;
-  free(Head);
-  free(Tail);
-
-  while(ptr != NULL){
-    next = ptr->Next;
-   // if(std::is_pointer<Type>::value) delete *ptr->Elem;
-    ptr->Elem->Delete();
-    //delete ptr;
-    ptr = next;
-  }
-} */
-
-
-// Wyczyść całą kolejkę
-/* template<typename Type>
-void Dequeue<Type>::DeletePtr(){
-
-  Node<Type> *ptr = Head;
-  Node<Type> *next;
-  Head = NULL;
-
-  while(ptr != NULL){
-    next = ptr->Next;
-    delete *ptr->Elem;
     delete ptr;
     ptr = next;
   }
-} */
+}
 
 /* Wyświetl całą kolejkę idąc od końca
 (funkcja była używana jedynie do testów poprawności działania kolejki w obu kierunkach) */

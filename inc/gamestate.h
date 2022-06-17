@@ -4,12 +4,11 @@
 #include "size.h"
 #include <vector>
 
+/*Bledy we wpisywaniu znaku do planszy*/
 #define OUTSIDE_BOARD_ERR 1
-#define INCORRECT_TYPE_ERR 2
-#define SPACE_TAKEN_ERR 3
+#define SPACE_TAKEN_ERR 2
 
 #define DRAW -2
-#define POTENTIAL_DRAW -100
 
 
 /*Klasa opisująca stan gry w kółko krzyżyk w danym momencie*/
@@ -41,7 +40,7 @@ class GameState{
         /*Usuń znak w danym miejscu planszy*/
         void DeleteChar(int x, int y);
 
-        //std::vector<std::vector<int>> GetBoard() const {return Board;};
+        std::vector<std::vector<int>> GetBoard() const {return Board;};
 
         int GetCost() const {return Cost;};
 
@@ -49,7 +48,7 @@ class GameState{
 
         int GetNextMove() const {return NextMove;};
 
-        /*Sprawdź czy któryś z graczy wygrał (1 = kółko, -1 = krzyżyk, 0 = w danym momencie nikt nie wygrał)*/
+        /*Sprawdź czy któryś z graczy wygrał (1 = kółko, -1 = krzyżyk, 0 = w danym momencie nikt nie wygrał, -2 = jest remis)*/
         int CheckWinner();
 
         /*Funkcja heurystyczna do wyznaczania kosztu obecnej planszy*/
@@ -63,7 +62,7 @@ class GameState{
 
         bool operator == (const GameState &GS) const;
 
-        /*Wyświetlanie planszy (tylko planszy)*/
-        friend std::ostream &operator<< (std::ostream &out, const GameState& GS);
-
 };
+
+/*Wyświetlanie planszy (tylko planszy)*/
+std::ostream &operator << (std::ostream &out, GameState const &GS);

@@ -1,17 +1,24 @@
-#include "../inc/gamestate.h"
+#include "./inc/gamestate.h"
 
 int BOARD_SIZE;
 
-std::ostream &operator << (std::ostream &out, const GameState& GS){
+std::ostream &operator << (std::ostream &out, GameState const &GS){
+
+    out << "  ";
+    for(int i=1; i<BOARD_SIZE+1; i++){
+        out << "| " << i << " "; 
+    } 
+    out << "| " << std::endl;
 
     for(int i=0;i<BOARD_SIZE;i++){
+        out << i+1 << " |";
         for(int j=0;j<BOARD_SIZE;j++){
-            if (GS.Board[i][j] == -1) out << " X ";
-            if (GS.Board[i][j] == 0) out << "   ";
-            if (GS.Board[i][j] == 1) out << " O ";
+            if (GS.GetBoard()[i][j] == -1) out << " X ";
+            if (GS.GetBoard()[i][j] == 0) out << "   ";
+            if (GS.GetBoard()[i][j] == 1) out << " O ";
             if (j != BOARD_SIZE -1) out << "|";
         }
-        out << std::endl;
+        out << "| " << std::endl;
     }
     return out;
 }
@@ -116,7 +123,6 @@ int GameState::DetermineCost(){
     
     int* arr = new int[2*BOARD_SIZE + 2];
     int k=0;
-    int draw = 0;
 
     for(int i=0; i<2*BOARD_SIZE+2;i++){
         arr[i] = 0;
@@ -126,7 +132,6 @@ int GameState::DetermineCost(){
         for(int j=0;j<BOARD_SIZE;j++){
             if(arr[k] * Board[i][j] < 0){
                 arr[k] = 0;
-                draw++;
                 break;
             }
             arr[k] += Board[i][j];
@@ -139,7 +144,6 @@ int GameState::DetermineCost(){
         for(int j=0;j<BOARD_SIZE;j++){
             if(arr[k] * Board[j][i] < 0){
                 arr[k] = 0;
-                draw++;
                 break;
             }
             arr[k] += Board[j][i];
@@ -150,7 +154,6 @@ int GameState::DetermineCost(){
     for(int i=0;i<BOARD_SIZE;i++){
         if(arr[k] * Board[i][i] < 0){
             arr[k] = 0;
-            draw++;
             break;
         }
         arr[k] += Board[i][i];
@@ -160,7 +163,6 @@ int GameState::DetermineCost(){
     for(int i=0;i<BOARD_SIZE;i++){
         if(arr[k] * Board[i][BOARD_SIZE-i-1] < 0){
             arr[k] = 0;
-            draw++;
             break;
         }
         arr[k] += Board[i][BOARD_SIZE-i-1];
