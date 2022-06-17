@@ -1,4 +1,4 @@
-#include "./inc/vertex.h"
+#include "../inc/vertex.h"
 
 std::ostream &operator << (std::ostream &out, Vertex const &vertex){
     out << vertex.GetObject();

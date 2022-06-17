@@ -1,6 +1,5 @@
-#include "./inc/graph.h"
+#include "../inc/graph.h"
 
-#include <windows.h>
 #include <chrono>
 
 int main(){
@@ -9,7 +8,6 @@ int main(){
     int y;
     int* alpha = new int(100);
     int* beta = new int(-100);
-    int zapis = 0;
 
     Vertex *V1 = new Vertex();
     Graph graph;
@@ -50,10 +48,10 @@ int main(){
             std::cout << "O";
             std::cout << std::endl << "Ruch komputera: " << std::endl;
             V1 = graph.InsertVertex(tablica);
-            auto start = std::chrono::steady_clock::now();
-            graph.CreateFutureMovesTree(V1, SEARCH_DEPTH); 
+            //auto start = std::chrono::steady_clock::now(); //zacznij timer
+	    graph.CreateFutureMovesTree(V1, SEARCH_DEPTH); 
             graph.Minimax(V1, alpha, beta);
-            auto end = std::chrono::steady_clock::now();
+            //auto end = std::chrono::steady_clock::now();  //zakoncz timer
             //std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count() << std::endl;   //mozliwosc sprawdzenia czasu trwania przeszukiwania
 
             tablica.InsertBoard(graph.GetMaxMove(V1)); 

@@ -1,4 +1,4 @@
-#include "./inc/graph.h"
+#include "../inc/graph.h"
 
 void Graph::CreateFutureMovesTree (Vertex* V1, int i){
 
@@ -138,16 +138,12 @@ int Graph::Minimax(Vertex *V, int* alpha, int* beta){
     Dequeue<Vertex> adjacent = AdjacentVertices(V);
 
     if (adjacent.IsEmpty()){
-/*         if(V->GetObject().NextMove == 1){
-            Max(V, alpha, beta);
-        } else {
-            Min(V, alpha, beta);
-        } */
         return 0;
     }
 
     while (!adjacent.IsEmpty()){
-        if(Minimax(&adjacent.RemoveFirst(), alpha, beta)==1){
+	Vertex first = adjacent.RemoveFirst();
+        if(Minimax(&first, alpha, beta)==1){
             while(!adjacent.IsEmpty()){
                 adjacent.RemoveFirst();
             }
@@ -176,4 +172,5 @@ GameState Graph::GetMaxMove(Vertex *V){
             return GS;  
         }
     }
+    return GameState();
 }
