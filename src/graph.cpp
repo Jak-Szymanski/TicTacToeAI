@@ -38,7 +38,6 @@ Vertex* Graph::InsertVertex(GameState x){
     Vertex *V = new Vertex(x);
     VQueue.InsertFront(*V);
     VQueue.GetHead()->GetElem().SetPos(VQueue.GetHead());
-   //std::cout << *V << std::endl;
     return V;    
 }
 
